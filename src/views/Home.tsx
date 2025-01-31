@@ -13,7 +13,7 @@ function Home() {
   return (
     <section
       id="home"
-      className="w-full p-32 flex flex-col gap-8 h-screen font-ibm"
+      className="w-full p-32 flex flex-col gap-8 font-ibm"
     >
       <div className="flex gap-4 w-full">
         <div className="p-4 w-full flex flex-col gap-6 items-start">
