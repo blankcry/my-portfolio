@@ -47,7 +47,7 @@ function About() {
               with an eye for detail
             </p>
           </div>
-          <a href="" className="flex gap-4 items-center">
+          <a href="https://docs.google.com/document/d/1P81SG_ILDA_xWMfAKbVF41KLqrmsuWcGYFdIqX0obsk/edit?usp=sharing" className="flex gap-4 items-center">
             <span className="underline dark:decoration-white">Download CV</span>
             <img src={NorthEastBlack} width={20} height={20} />
           </a>
