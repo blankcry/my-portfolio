@@ -24,10 +24,10 @@ function Navbar() {
       title: "blogs",
       href: "blogs",
     },
-    {
-      title: "contacts",
-      href: "contacts",
-    },
+    // {
+    //   title: "contacts",
+    //   href: "contacts",
+    // },
   ];
   const [activeSection, setActiveSection] = useState<string>("");
   const handleScroll = (id: string) => {
