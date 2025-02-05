@@ -14,11 +14,17 @@ import experience from "@/data/experience";
 dayjs.extend(relativeTime);
 
 function About() {
+  const handleScroll = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <section id="about" className="w-full flex flex-col gap-8">
       <div
         id="Heading"
-        className="flex flex-col gap-4 w-full text-left p-24 pb-0"
+        className="flex flex-col gap-4 w-full text-left px-24 py-12 pb-0"
       >
         <span className="capitalize italic text-[18px] font-semibold">
           nice to meet you!
@@ -122,7 +128,10 @@ function About() {
           </div>
         </div>
       </div>
-      <div className="gradient w-full p-24 flex justify-between gap-16 text-white">
+      <div className="mx-auto w-full flex justify-center items-center cursor-pointer" onClick={() => handleScroll("experience")}>
+      <Icon icon="carbon:down-to-bottom" width="32" height="32" />
+      </div>
+      <div id="experience" className="gradient w-full px-24 py-12 flex justify-between gap-16 text-white">
         <div className="w-[50%] font-ibm flex flex-col gap-4">
           <span className="italic font-semibold">Experience</span>
           <span className="text-4xl font-extrabold">MY EXPERIENCE</span>
