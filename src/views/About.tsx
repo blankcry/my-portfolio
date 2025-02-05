@@ -31,7 +31,7 @@ function About() {
         <div className="flex flex-col gap-4 w-full text-center items-center font-ibm">
           <img src={HeroImage} width={400} />
           <div>
-            <p className="bg-gradient-to-r from-[#344054] to-[#34A853] bg-clip-text text-transparent uppercase font-bold text-[48px]">
+            <p className="gradient-text uppercase font-bold text-[48px]">
               blankcry
             </p>
             <p className="text-[18px] capitalize">
@@ -70,7 +70,7 @@ function About() {
             {/* Years Experience */}
             <div className="flex flex-col gap-4 w-[50%]">
               <p className="text-[12px] flex items-center gap-2">
-                <span className="bg-gradient-to-r from-[#344054] to-[#34A853] bg-clip-text text-transparent uppercase font-bold text-[48px]">
+                <span className="gradient-text uppercase font-bold text-[48px]">
                   {dayjs("2021-01-01").toNow(true).split(" ")[0]}+
                 </span>
                 <span className="flex flex-col text-left font-bold italic">
@@ -86,7 +86,7 @@ function About() {
             {/* Clients Number */}
             <div className="flex flex-col gap-4 w-[50%]">
               <p className="text-[12px] flex items-center gap-2">
-                <span className="bg-gradient-to-r from-[#344054] to-[#34A853] bg-clip-text text-transparent uppercase font-bold text-[48px]">
+                <span className="gradient-text uppercase font-bold text-[48px]">
                   10+
                 </span>
                 <span className="flex flex-col text-left font-bold italic">
@@ -122,7 +122,7 @@ function About() {
           </div>
         </div>
       </div>
-      <div className="bg-gradient-to-r from-[#344054] to-[#34A853] w-full p-24 flex justify-between gap-16 text-white">
+      <div className="gradient w-full p-24 flex justify-between gap-16 text-white">
         <div className="w-[50%] font-ibm flex flex-col gap-4">
           <span className="italic font-semibold">Experience</span>
           <span className="text-4xl font-extrabold">MY EXPERIENCE</span>

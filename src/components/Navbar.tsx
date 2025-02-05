@@ -54,7 +54,7 @@ function Navbar() {
             key={component.title}
             onClick={() => handleScroll(component.href)}
             className={
-              "hover:cursor-pointer hover:bg-white hover:text-black hover:font-bold px-8 py-4 rounded-md" +
+              "hover:cursor-pointer hover:bg-white hover:text-black hover:font-bold px-8 py-4 rounded-md transition-all duration-700" +
               (activeSection === component.href
                 ? " bg-white text-black font-bold"
                 : "")

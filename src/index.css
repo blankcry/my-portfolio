@@ -7,6 +7,14 @@
     @apply font-montserrat;
   }
 }
+@layer utilities {
+  .gradient-text {
+    @apply bg-gradient-to-r from-[#344054] to-[#34A853] bg-clip-text text-transparent hover:from-[#34A853] hover:to-[#344054]
+  }
+  .gradient {
+    @apply bg-gradient-to-r from-[#344054] to-[#34A853] hover:from-[#34A853] hover:to-[#344054] transition duration-500 ease-linear hover:-translate-y-1
+  }
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

@@ -13,9 +13,9 @@ function Home() {
   return (
     <section
       id="home"
-      className="w-full p-32 flex flex-col gap-8 font-ibm"
+      className="w-full px-32 pt-32 flex flex-col gap-8 font-ibm h-screen"
     >
-      <div className="flex gap-4 w-full">
+      <div className="flex-1 flex gap-4 w-full">
         <div className="p-4 w-full flex flex-col gap-6 items-start">
           <div>
             <img
@@ -70,6 +70,9 @@ function Home() {
         <div className="w-full">
           <img src={HeroImage} />
         </div>
+      </div>
+      <div className="mx-auto w-full flex justify-center items-center cursor-pointer" onClick={() => handleScroll("about")}>
+      <Icon icon="carbon:down-to-bottom" width="32" height="32" />
       </div>
     </section>
   );
