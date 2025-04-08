@@ -38,7 +38,7 @@ function Navbar() {
     }
   };
   return (
-    <nav className="bg-black text-white flex md:flex-col md:h-screen border-r-2 border-white max-w-max sticky gap-8 p-4 dark:border-r-2 dark:border-white">
+    <nav className="bg-black text-white md:flex-col md:h-screen border-r-2 border-white max-w-max sticky gap-8 p-4 dark:border-r-2 dark:border-white hidden md:flex">
       <a href="/" target="_blank">
         <img
           src={Blankcry}

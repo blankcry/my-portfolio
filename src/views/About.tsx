@@ -20,6 +20,7 @@ function About() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+  const experienceInYears = dayjs("2020-01-01").toNow(true).split(" ")[0]
   return (
     <section id="about" className="w-full flex flex-col gap-8">
       <div
@@ -77,7 +78,7 @@ function About() {
             <div className="flex flex-col gap-4 w-[50%]">
               <p className="text-[12px] flex items-center gap-2">
                 <span className="gradient-text uppercase font-bold text-[48px]">
-                  {dayjs("2021-01-01").toNow(true).split(" ")[0]}+
+                  {experienceInYears}+
                 </span>
                 <span className="flex flex-col text-left font-bold italic">
                   Years <br />
@@ -101,7 +102,7 @@ function About() {
                 </span>
               </p>
               <p>
-                With 4+ years experience as a professional a full-stack
+                With {experienceInYears}+ years experience as a professional a full-stack
                 developer, I have acquired the skills and knowledge necessary to
                 make your project a success.
               </p>
