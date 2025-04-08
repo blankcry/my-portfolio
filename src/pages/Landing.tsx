@@ -29,7 +29,7 @@ function Landing() {
           width: "100%",
         }}
       >
-        <div className="flex flex-col gap-8 items-center">
+        <div className="flex flex-col gap-8 items-center p-16 text-sm">
           <a href="/" target="_blank">
             <img
               src={Blankcry}
