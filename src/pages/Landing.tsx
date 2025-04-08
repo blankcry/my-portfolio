@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import About from "@/views/About";
 import Blogs from "@/views/Blogs";
-import Contacts from "@/views/Contacts";
+// import Contacts from "@/views/Contacts";
 import Home from "@/views/Home";
 import Services from "@/views/Services";
 import Works from "@/views/Works";
@@ -18,7 +18,7 @@ function Landing() {
         <Services />
         <Works />
         <Blogs />
-        <Contacts />
+        {/* <Contacts /> */}
       </div>
       <div
         className="md:hidden flex justify-center items-center h-screen text-white p-8 text-nowrap"
