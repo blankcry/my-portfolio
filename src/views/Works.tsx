@@ -37,7 +37,7 @@ function Works() {
   const displayedProjects = showAll ? projects : projects.slice(0, 5);
 
   return (
-    <section id="works" className="w-full p-4 md:p-8 flex flex-col gap-8 min-h-screen gradient rounded-t-[7rem] rounded-xl">
+    <section id="works" className="w-full snap-start flex flex-col gap-8 px-4 md:px-24 gradient rounded-t-[7rem] rounded-xl">
       <div className="flex flex-col gap-4 w-full text-center justify-center text-white">
         <span className="capitalize font-bold text-[30px] md:text-[40px]">
           Explore my <span className="gradient-text">Projects.</span>

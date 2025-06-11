@@ -1,6 +1,6 @@
 function Blogs() {
   return (
-    <section id="blogs" className="w-full p-8 flex flex-col gap-8 h-screen">
+    <section id="blogs" className="w-full h-screen snap-start flex flex-col gap-8 px-4 md:px-24">
          <div
            id="Heading"
            className="flex flex-col gap-4 w-full text-center justify-center"

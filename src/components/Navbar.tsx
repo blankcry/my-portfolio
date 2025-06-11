@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Blankcry from "@/assets/logo_100x40.svg";
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter } from "@/components/ui/sidebar";
@@ -10,8 +10,8 @@ const navItems = [
   { title: "About", href: "about" },
   { title: "Services", href: "services" },
   { title: "works", href: "works" },
+  { title: "contacts", href: "contacts" },
   { title: "blogs", href: "blogs" },
-  // { title: "contacts", href: "contacts" },
 ];
 
 function NavLinks({ activeSection, handleScroll }: { activeSection: string; handleScroll: (id: string) => void }) {
@@ -56,6 +56,35 @@ function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
   const isMobile = useIsMobile();
   const [sheetOpen, setSheetOpen] = useState(false);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.5, // Trigger when 50% of the section is visible
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    navItems.forEach((item) => {
+      const element = document.getElementById(item.href);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => {
+      // Cleanup observer on component unmount
+      observer.disconnect();
+    };
+  }, []);
 
   const handleScroll = (id: string) => {
     const element = document.getElementById(id);

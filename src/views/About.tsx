@@ -22,7 +22,7 @@ function About() {
   };
   const experienceInYears = dayjs("2020-01-01").toNow(true).split(" ")[0]
   return (
-    <section id="about" className="w-full flex flex-col gap-8">
+    <section id="about" className="w-full snap-start flex flex-col gap-8">
       <div
         id="Heading"
         className="flex flex-col gap-4 w-full text-left px-4 md:px-24 py-8 md:py-12 pb-0"
@@ -138,7 +138,7 @@ function About() {
       <div className="mx-auto w-full flex justify-center items-center cursor-pointer animate-bounce" onClick={() => handleScroll("experience")}>
         <Icon icon="carbon:down-to-bottom" width="32" height="32" />
       </div>
-      <div id="experience" className="gradient rounded-t-[7rem] rounded-xl w-full px-4 md:px-24 py-8 md:py-12 flex flex-col md:flex-row justify-between gap-8 md:gap-16 text-white">
+      <div id="experience" className="gradient md:rounded-t-[7rem] rounded-xl w-full px-4 md:px-24 py-8 md:py-12 flex flex-col md:flex-row justify-between gap-8 md:gap-16 text-white">
         <div className="w-full md:w-[50%] font-ibm flex flex-col gap-4">
           <span className="italic font-semibold text-sm md:text-base">Experience</span>
           <span className="text-2xl md:text-4xl font-extrabold">MY EXPERIENCE</span>

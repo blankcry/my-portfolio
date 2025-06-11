@@ -13,7 +13,7 @@ function Home() {
   return (
     <section
       id="home"
-      className="w-full px-4 md:px-8 pt-12 md:pt-8 flex flex-col gap-8 font-ibm min-h-screen"
+      className="w-full h-screen snap-start flex flex-col justify-center items-center gap-8 px-4 md:px-24"
     >
       <div className="flex-1 flex flex-col md:flex-row gap-8 md:gap-4 w-full">
         <div className="p-2 md:p-4 w-full flex flex-col gap-6 items-center md:items-start">
