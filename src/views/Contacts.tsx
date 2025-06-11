@@ -18,10 +18,10 @@ function Contacts() {
         </div>
         
         <div className="flex flex-col gap-4 w-full text-center">
-          <span className="capitalize italic text-[18px] font-semibold">
+          <span className="capitalize italic text-lg font-semibold">
             Let's work together
           </span>
-          <span className="uppercase font-bold text-[48px]">
+          <span className="uppercase font-bold text-4xl md:text-5xl">
             Tell me about your next project
           </span>
         </div>

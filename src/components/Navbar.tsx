@@ -124,7 +124,7 @@ function Navbar() {
 
   // Mobile Sheet
   return (
-    <div className="fixed top-0 left-0 z-50 flex items-center justify-between w-full bg-sidebar text-sidebar-foreground p-4 md:hidden">
+    <nav className="sticky top-0 z-50 flex items-center justify-between w-full bg-sidebar text-sidebar-foreground p-4 md:hidden">
       <a href="/" target="_blank">
         <img
           src={Blankcry}
@@ -137,10 +137,10 @@ function Navbar() {
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger asChild>
           <button aria-label="Open menu" className="text-black dark:text-white rounded-lg">
-            <Icon icon="mdi:menu" width="32" height="32" />
+            <Icon icon="gg:menu-right" width="42" height="42" />
           </button>
         </SheetTrigger>
-        <SheetContent side="left" className="p-0 bg-sidebar text-sidebar-foreground w-64">
+        <SheetContent side="right" className="p-0 bg-sidebar text-sidebar-foreground w-[80%]">
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-center p-6 border-b border-sidebar-border">
               <a href="/" target="_blank">
@@ -162,7 +162,7 @@ function Navbar() {
           </div>
         </SheetContent>
       </Sheet>
-    </div>
+    </nav>
   );
 }
 

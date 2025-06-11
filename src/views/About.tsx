@@ -27,10 +27,10 @@ function About() {
         id="Heading"
         className="flex flex-col gap-4 w-full text-left px-4 md:px-24 py-8 md:py-12 pb-0"
       >
-        <span className="capitalize italic text-[16px] md:text-[18px] font-semibold">
+        <span className="capitalize italic text-base md:text-lg font-semibold">
           nice to meet you!
         </span>
-        <span className="uppercase font-bold text-[32px] md:text-[40px]">
+        <span className="uppercase font-bold text-3xl md:text-4xl">
           you can call me....
         </span>
       </div>
@@ -44,10 +44,10 @@ function About() {
             />
           </div>
           <div>
-            <p className="gradient-text uppercase font-bold text-[36px] md:text-[48px]">
+            <p className="gradient-text uppercase font-bold text-4xl md:text-5xl">
               blankcry
             </p>
-            <p className="text-[16px] md:text-[18px] capitalize">
+            <p className="text-base md:text-lg capitalize">
               <span className="font-extrabold italic">
                 Full Stack Developer
               </span>{" "}
@@ -82,8 +82,8 @@ function About() {
           <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-4">
             {/* Years Experience */}
             <div className="flex flex-col gap-4 w-full md:w-[50%]">
-              <p className="text-[12px] flex items-center gap-2">
-                <span className="gradient-text uppercase font-bold text-[36px] md:text-[48px]">
+              <p className="text-xs flex items-center gap-2">
+                <span className="gradient-text uppercase font-bold text-4xl md:text-5xl">
                   {experienceInYears}+
                 </span>
                 <span className="flex flex-col text-left font-bold italic">
@@ -98,8 +98,8 @@ function About() {
             </div>
             {/* Clients Number */}
             <div className="flex flex-col gap-4 w-full md:w-[50%]">
-              <p className="text-[12px] flex items-center gap-2">
-                <span className="gradient-text uppercase font-bold text-[36px] md:text-[48px]">
+              <p className="text-xs flex items-center gap-2">
+                <span className="gradient-text uppercase font-bold text-4xl md:text-5xl">
                   10+
                 </span>
                 <span className="flex flex-col text-left font-bold italic">
