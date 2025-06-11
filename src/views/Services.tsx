@@ -10,7 +10,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 function Services() {
   return (
-    <section id="services" className="w-full snap-start flex flex-col gap-8 px-4 md:px-24 pt-8">
+    <section id="services" className="w-full snap-start flex flex-col gap-8 px-4 md:px-24 pt-12">
       <div id="Heading" className="flex flex-col gap-4 w-full text-left">
         <span className="capitalize italic text-[16px] md:text-[18px] font-semibold">
           i like to make things easy and fun
