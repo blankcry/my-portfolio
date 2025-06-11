@@ -25,23 +25,29 @@ function About() {
     <section id="about" className="w-full flex flex-col gap-8">
       <div
         id="Heading"
-        className="flex flex-col gap-4 w-full text-left px-24 py-12 pb-0"
+        className="flex flex-col gap-4 w-full text-left px-4 md:px-24 py-8 md:py-12 pb-0"
       >
-        <span className="capitalize italic text-[18px] font-semibold">
+        <span className="capitalize italic text-[16px] md:text-[18px] font-semibold">
           nice to meet you!
         </span>
-        <span className="uppercase font-bold text-[40px]">
+        <span className="uppercase font-bold text-[32px] md:text-[40px]">
           you can call me....
         </span>
       </div>
-      <div className="flex justify-evenly gap-4 w-full px-24">
+      <div className="flex flex-col md:flex-row justify-evenly gap-8 md:gap-4 w-full px-4 md:px-24">
         <div className="flex flex-col gap-4 w-full text-center items-center font-ibm">
-          <img src={HeroImage} width={400} />
+          <div className="relative p-1 rounded-full gradient">
+            <img 
+              src={HeroImage} 
+              className="w-[280px] md:w-[400px] rounded-full object-cover aspect-square relative z-10 shadow-lg hover:scale-105 transition-transform duration-300" 
+              alt="Profile picture"
+            />
+          </div>
           <div>
-            <p className="gradient-text uppercase font-bold text-[48px]">
+            <p className="gradient-text uppercase font-bold text-[36px] md:text-[48px]">
               blankcry
             </p>
-            <p className="text-[18px] capitalize">
+            <p className="text-[16px] md:text-[18px] capitalize">
               <span className="font-extrabold italic">
                 Full Stack Developer
               </span>{" "}
@@ -54,30 +60,30 @@ function About() {
           </a>
         </div>
         <div className="flex flex-col w-full gap-8">
-          <div className="grid grid-cols-2 gap-4">
-            <span className="flex gap-3 items-center">
-              <Icon icon="el:phone-alt" width="24" height="24" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <span className="flex gap-3 items-center text-sm md:text-base">
+              <Icon icon="el:phone-alt" width="20" height="20" className="md:w-6 md:h-6" />
               +234 704 101 8558
             </span>
-            <span className="flex gap-3 items-center">
-              <Icon icon="iconamoon:profile-duotone" width="24" height="24" />
+            <span className="flex gap-3 items-center text-sm md:text-base">
+              <Icon icon="iconamoon:profile-duotone" width="20" height="20" className="md:w-6 md:h-6" />
               {dayjs().from(dayjs("1998-10-04"), true)}
             </span>
-            <span className="flex gap-3 items-center">
-              <Icon icon="mdi:email-box" width="24" height="24" />
+            <span className="flex gap-3 items-center text-sm md:text-base">
+              <Icon icon="mdi:email-box" width="20" height="20" className="md:w-6 md:h-6" />
               <span>gajejames@outlook.com</span>
             </span>
-            <span className="flex gap-3 items-center">
-              <Icon icon="dashicons:location" width="20" height="20" />
+            <span className="flex gap-3 items-center text-sm md:text-base">
+              <Icon icon="dashicons:location" width="18" height="18" className="md:w-5 md:h-5" />
               <span>Abuja, Nigeria</span>
             </span>
           </div>
           <hr className="border-0 bg-black dark:bg-white h-[2px] w-full" />
-          <div className="flex justify-between ">
+          <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-4">
             {/* Years Experience */}
-            <div className="flex flex-col gap-4 w-[50%]">
+            <div className="flex flex-col gap-4 w-full md:w-[50%]">
               <p className="text-[12px] flex items-center gap-2">
-                <span className="gradient-text uppercase font-bold text-[48px]">
+                <span className="gradient-text uppercase font-bold text-[36px] md:text-[48px]">
                   {experienceInYears}+
                 </span>
                 <span className="flex flex-col text-left font-bold italic">
@@ -85,15 +91,15 @@ function About() {
                   experience...
                 </span>
               </p>
-              <p>
+              <p className="text-sm md:text-base">
                 Hello there! My name is James Yunana I am a web designer &
                 developer, and I'm very passionate and dedicated to my work.
               </p>
             </div>
             {/* Clients Number */}
-            <div className="flex flex-col gap-4 w-[50%]">
+            <div className="flex flex-col gap-4 w-full md:w-[50%]">
               <p className="text-[12px] flex items-center gap-2">
-                <span className="gradient-text uppercase font-bold text-[48px]">
+                <span className="gradient-text uppercase font-bold text-[36px] md:text-[48px]">
                   10+
                 </span>
                 <span className="flex flex-col text-left font-bold italic">
@@ -101,7 +107,7 @@ function About() {
                   Worldwide...
                 </span>
               </p>
-              <p>
+              <p className="text-sm md:text-base">
                 With {experienceInYears}+ years experience as a professional a full-stack
                 developer, I have acquired the skills and knowledge necessary to
                 make your project a success.
@@ -109,34 +115,34 @@ function About() {
             </div>
           </div>
           <div className="bg-black dark:bg-white p-4 flex flex-col gap-2 text-white dark:text-black justify-between items-start rounded-md">
-            <p className="flex gap-2">
-              <Icon icon="line-md:check-all" width="24" height="24" inline />
+            <p className="flex gap-2 text-sm md:text-base">
+              <Icon icon="line-md:check-all" width="20" height="20" className="md:w-6 md:h-6" inline />
               Develop highly interactive Front end / User Interfaces for the web
             </p>
-            <p className="flex gap-2">
-              <Icon icon="line-md:check-all" width="24" height="24" inline />
+            <p className="flex gap-2 text-sm md:text-base">
+              <Icon icon="line-md:check-all" width="20" height="20" className="md:w-6 md:h-6" inline />
               Progressive Web Applications ( PWA ) in normal and SPA Stacks
             </p>
-            <p className="flex gap-2">
-              <Icon icon="line-md:check-all" width="24" height="24" inline />
+            <p className="flex gap-2 text-sm md:text-base">
+              <Icon icon="line-md:check-all" width="20" height="20" className="md:w-6 md:h-6" inline />
               Integration of third party services such as AWS / Digital Ocean
             </p>
-            <p className="flex gap-2">
-              <Icon icon="line-md:check-all" width="24" height="24" inline />
+            <p className="flex gap-2 text-sm md:text-base">
+              <Icon icon="line-md:check-all" width="20" height="20" className="md:w-6 md:h-6" inline />
               Integration of payment services such as M-Pesa, Monnify,
               Flutterwave and paypal etc
             </p>
           </div>
         </div>
       </div>
-      <div className="mx-auto w-full flex justify-center items-center cursor-pointer" onClick={() => handleScroll("experience")}>
-      <Icon icon="carbon:down-to-bottom" width="32" height="32" />
+      <div className="mx-auto w-full flex justify-center items-center cursor-pointer animate-bounce" onClick={() => handleScroll("experience")}>
+        <Icon icon="carbon:down-to-bottom" width="32" height="32" />
       </div>
-      <div id="experience" className="gradient w-full px-24 py-12 flex justify-between gap-16 text-white">
-        <div className="w-[50%] font-ibm flex flex-col gap-4">
-          <span className="italic font-semibold">Experience</span>
-          <span className="text-4xl font-extrabold">MY EXPERIENCE</span>
-          <span>
+      <div id="experience" className="gradient rounded-t-[7rem] rounded-xl w-full px-4 md:px-24 py-8 md:py-12 flex flex-col md:flex-row justify-between gap-8 md:gap-16 text-white">
+        <div className="w-full md:w-[50%] font-ibm flex flex-col gap-4">
+          <span className="italic font-semibold text-sm md:text-base">Experience</span>
+          <span className="text-2xl md:text-4xl font-extrabold">MY EXPERIENCE</span>
+          <span className="text-sm md:text-base">
             I am a full stack web developer, with experience in creating
             different application such as fintech apps and Saas. I am primarily
             skilled in Javascript with usage on both backend and frontend, I
@@ -157,40 +163,41 @@ function About() {
             in users.
           </span>
         </div>
-        <div className="w-[50%]">
+        <div className="w-full md:w-[50%]">
           <Accordion type="single" collapsible className="">
             {experience.map((exp, index) => (
               <AccordionItem value={`${index}`} key={index}>
                 <AccordionTrigger className="justify-end gap-2 bg-transparent text-white">
                   <div className="flex flex-col gap-2 w-full">
-                    <div className="flex justify-between w-full">
+                    <div className="flex flex-col md:flex-row justify-between w-full text-sm md:text-base">
                       <span>
                         {exp.date.start} - {exp.date.end}
                       </span>
                       <span>{exp.company}</span>
                     </div>
-                    <span>{exp.position}</span>
+                    <span className="text-sm md:text-base">{exp.position}</span>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="w-full flex flex-col gap-2 font-ibm">
                     {Array.isArray(exp.desc) ? (
                       exp.desc.map((desc, index) => (
-                        <span key={index} className="flex gap-2">
+                        <span key={index} className="flex gap-2 text-sm md:text-base">
                           {" "}
                           <Icon
                             icon="line-md:check-all"
-                            width="24"
-                            height="24"
+                            width="20"
+                            height="20"
+                            className="md:w-6 md:h-6"
                             inline
                           />
                           {desc}
                         </span>
                       ))
                     ) : (
-                      <span>{exp.desc}</span>
+                      <span className="text-sm md:text-base">{exp.desc}</span>
                     )}
-                    <span className="italic">
+                    <span className="italic text-sm md:text-base">
                       <span className="font-semibold">Skills:</span>{" "}
                       {Array.isArray(exp.skills)
                         ? exp.skills?.join(", ")
