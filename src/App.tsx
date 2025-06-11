@@ -9,7 +9,7 @@ import Blogs from "@/views/Blogs";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <div className="flex flex-col md:flex-row min-h-screen bg-background text-foreground">
         <Navbar />
         <main className="flex-1 overflow-y-auto snap-y snap-mandatory h-screen bg-white text-black dark:bg-black dark:text-white">

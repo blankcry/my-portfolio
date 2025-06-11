@@ -136,7 +136,7 @@ function Navbar() {
       </a>
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger asChild>
-          <button aria-label="Open menu" className="text-black dark:text-white rounded-lg">
+          <button aria-label="Open menu" className="rounded-lg bg-inherit">
             <Icon icon="gg:menu-right" width="42" height="42" />
           </button>
         </SheetTrigger>
