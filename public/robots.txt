@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://my-portfolio-seven-pi-84.vercel.app/sitemap.xml 
