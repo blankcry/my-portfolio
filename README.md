@@ -2,7 +2,7 @@
 
 A modern, responsive developer portfolio built with React, TypeScript, and Vite. Showcasing my projects, experience, and skills with a focus on performance, accessibility, and SEO.
 
-[Live Demo](https://my-portfolio-seven-pi-84.vercel.app/)
+[Live Demo](https://my-portfolio-james-yunanas-projects.vercel.app/)
 
 ---
 

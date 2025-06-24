@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://my-portfolio-seven-pi-84.vercel.app/sitemap.xml 
+Sitemap: https://my-portfolio-seven-pi-84.vercel.app/sitemap.xml
+Sitemap: https://my-portfolio-git-main-james-yunanas-projects.vercel.app/sitemap.xml
+Sitemap: https://my-portfolio-james-yunanas-projects.vercel.app/sitemap.xml
