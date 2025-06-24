@@ -1,50 +1,105 @@
-# React + TypeScript + Vite
+# Blankcry's Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive developer portfolio built with React, TypeScript, and Vite. Showcasing my projects, experience, and skills with a focus on performance, accessibility, and SEO.
 
-Currently, two official plugins are available:
+[Live Demo](https://my-portfolio-seven-pi-84.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Table of Contents
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Screenshots](#screenshots)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [SEO & Sitemap](#seo--sitemap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Credits](#credits)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+## About
+This is my personal portfolio website, designed to highlight my work as a software developer. It includes:
+- A summary of my professional experience
+- A gallery of selected projects with descriptions and tech stacks
+- Contact information
+- Responsive design for all devices
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Features
+- ⚡️ Fast and optimized with Vite
+- 🎨 Styled with Tailwind CSS
+- 🖼️ Project gallery with images and links
+- 📱 Mobile-friendly and accessible
+- 🔍 SEO optimized (custom sitemap, robots.txt, static project summary page)
+- 📝 Easy to update project and experience data
+
+## Tech Stack
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+## Screenshots
+<!-- You can add screenshots here -->
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v22+ recommended)
+- Yarn or npm
+
+### Installation
+```bash
+git clone https://github.com/your-username/my-portfolio.git
+cd my-portfolio
+yarn install # or npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### Development
+```bash
+yarn dev # or npm run dev
 ```
+Visit [http://localhost:5173](http://localhost:5173) to view the site locally.
+
+### Production Build
+```bash
+yarn build # or npm run build
+yarn preview # or npm run preview
+```
+
+---
+
+## Usage
+- Update your project and experience data in `src/data/`.
+- Add or update images in `public/project/`.
+- Customize styles in `src/index.css` or Tailwind config.
+
+---
+
+## SEO & Sitemap
+- Static HTML summary page: [`/public/projects.html`](public/projects.html)
+- Sitemap: [`/public/sitemap.xml`](public/sitemap.xml)
+- robots.txt: [`/public/robots.txt`](public/robots.txt)
+
+These files help search engines index your portfolio and projects. Learn more about [sitemaps](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap).
+
+---
+
+## Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## License
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## Credits
+- Built and designed by [Blankcry](https://github.com/blankcry)
+- Inspired by modern portfolio and developer best practices
+- [How to Write a Good README File (freeCodeCamp)](https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/)
