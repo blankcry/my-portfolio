@@ -10,7 +10,6 @@ export default defineConfig({
     react(),
     vitePrerenderPlugin({
       renderTarget: "#root", // or whatever your root element is
-      additionalPrerenderRoutes: ["/projects.html"],
       prerenderScript: path.resolve(__dirname, "prerender.js"),
     }),
   ],
