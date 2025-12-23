@@ -9,11 +9,13 @@ import NorthEastBlack from "@/assets/north_east_black.svg";
 import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import experience from "@/data/experience";
+import { useExperience } from "@/hooks/useExperience";
+import { ExperienceItemSkeleton } from "@/components/ExperienceItemSkeleton";
 
 dayjs.extend(relativeTime);
 
 function About() {
+  const { experience, loading, error } = useExperience();
   const handleScroll = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -165,13 +167,15 @@ function About() {
         </div>
         <div className="w-full md:w-[50%]">
           <Accordion type="single" collapsible className="">
-            {experience.map((exp, index) => (
+            {loading && Array.from({ length: 5 }).map((_, i) => <ExperienceItemSkeleton key={i} />)}
+            {error && <p className="text-white">Error fetching experience: {error}</p>}
+            {!loading && !error && experience.map((exp, index) => (
               <AccordionItem value={`${index}`} key={index}>
                 <AccordionTrigger className="justify-end gap-2 bg-transparent text-white">
                   <div className="flex flex-col gap-2 w-full">
                     <div className="flex flex-col md:flex-row justify-between w-full text-sm md:text-base">
                       <span>
-                        {exp.date.start} - {exp.date.end}
+                        {exp.start_date} - {exp.end_date}
                       </span>
                       <span>{exp.company}</span>
                     </div>
@@ -180,28 +184,21 @@ function About() {
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="w-full flex flex-col gap-2 font-ibm">
-                    {Array.isArray(exp.desc) ? (
-                      exp.desc.map((desc, index) => (
-                        <span key={index} className="flex gap-2 text-sm md:text-base">
-                          {" "}
-                          <Icon
-                            icon="line-md:check-all"
-                            width="20"
-                            height="20"
-                            className="md:w-6 md:h-6"
-                            inline
-                          />
-                          {desc}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-sm md:text-base">{exp.desc}</span>
-                    )}
+                    {exp.desc && exp.desc.map((item, index) => (
+                      <span key={index} className="flex gap-2 text-sm md:text-base">
+                        <Icon
+                          icon="line-md:check-all"
+                          width="20"
+                          height="20"
+                          className="md:w-6 md:h-6"
+                          inline
+                        />
+                        {item}
+                      </span>
+                    ))}
                     <span className="italic text-sm md:text-base">
                       <span className="font-semibold">Skills:</span>{" "}
-                      {Array.isArray(exp.skills)
-                        ? exp.skills?.join(", ")
-                        : exp.skills?.split(" · ").join(", ")}
+                      {exp.skills?.join(", ")}
                     </span>
                   </div>
                 </AccordionContent>

@@ -1,4 +1,5 @@
-import projects from "@/data/projects";
+import { useProjects } from "@/hooks/useProjects";
+import { ProjectCardSkeleton } from "@/components/ProjectCardSkeleton";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/carousel";
 
 function Works() {
+  const { projects, loading, error } = useProjects();
   const [isMobile, setIsMobile] = useState(false);
   const [showAll, setShowAll] = useState(false);
 
@@ -34,7 +36,7 @@ function Works() {
     }
   };
 
-  const displayedProjects = showAll ? projects : projects.slice(0, 5);
+  const displayedProjects = showAll ? projects : projects.slice(0, 6);
 
   return (
     <section id="works" className="w-full snap-start flex flex-col gap-8 p-4 md:px-24 gradient md:rounded-t-[7rem] rounded-xl">
@@ -48,7 +50,9 @@ function Works() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-        {displayedProjects.map((project, index) => (
+        {loading && Array.from({ length: 6 }).map((_, i) => <ProjectCardSkeleton key={i} />)}
+        {error && <p>Error fetching projects: {error}</p>}
+        {!loading && !error && displayedProjects.map((project, index) => (
           <Dialog key={index}>
             <DialogTrigger asChild>
               <Card 
@@ -138,7 +142,7 @@ function Works() {
           </Dialog>
         ))}
         
-        {!showAll && projects.length > 5 && (
+        {!showAll && projects.length > 6 && (
           <Card 
             className="cursor-pointer hover:shadow-lg transition-all duration-300 border-dashed"
             onClick={() => setShowAll(true)}
@@ -150,7 +154,7 @@ function Works() {
                 </div>
                 <CardTitle>Show More Projects</CardTitle>
                 <CardDescription>
-                  View {projects.length - 5} more projects
+                  View {projects.length - 6} more projects
                 </CardDescription>
               </div>
             </CardHeader>
