@@ -30,13 +30,15 @@ function Works() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const projectsToDisplay = 3;
+
   const handleProjectClick = (url: string) => {
     if (isMobile) {
       window.open(url, '_blank');
     }
   };
 
-  const displayedProjects = showAll ? projects : projects.slice(0, 6);
+  const displayedProjects = showAll ? projects : projects.slice(0, projectsToDisplay);
 
   return (
     <section id="works" className="w-full snap-start flex flex-col gap-8 p-4 md:px-24 gradient md:rounded-t-[7rem] rounded-xl">
@@ -142,7 +144,7 @@ function Works() {
           </Dialog>
         ))}
         
-        {!showAll && projects.length > 6 && (
+        {!showAll && projects.length > projectsToDisplay && (
           <Card 
             className="cursor-pointer hover:shadow-lg transition-all duration-300 border-dashed"
             onClick={() => setShowAll(true)}
@@ -154,7 +156,7 @@ function Works() {
                 </div>
                 <CardTitle>Show More Projects</CardTitle>
                 <CardDescription>
-                  View {projects.length - 6} more projects
+                  View {projects.length - projectsToDisplay} more projects
                 </CardDescription>
               </div>
             </CardHeader>

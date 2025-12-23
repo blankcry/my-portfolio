@@ -2,6 +2,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 import Home from "@/views/Home";
 import About from "@/views/About";
+import Experience from "@/views/Experience";
 import Services from "@/views/Services";
 import Works from "@/views/Works";
 import Contacts from "@/views/Contacts";
@@ -15,6 +16,7 @@ function App() {
         <main className="flex-1 overflow-y-auto snap-y snap-mandatory h-screen bg-white text-black dark:bg-black dark:text-white">
           <Home />
           <About />
+          <Experience />
           <Services />
           <Works />
           <Contacts />

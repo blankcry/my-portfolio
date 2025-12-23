@@ -8,6 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 const navItems = [
   { title: "Home", href: "home" },
   { title: "About", href: "about" },
+  { title: "Experience", href: "experience" },
   { title: "Services", href: "services" },
   { title: "works", href: "works" },
   { title: "contacts", href: "contacts" },

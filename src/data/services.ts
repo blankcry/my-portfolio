@@ -30,15 +30,15 @@ export default [
         icon: "bx:bx-support",
         desc: "I provide ongoing support and maintenance services to keep your website or app running smoothly. I offer updates, backups, and security checks to ensure everything is up-to-date.",
     },
-    {
-        name: "Mobile Development",
-        icon: "bx:bx-mobile",
-        desc: "I develop mobile applications for both Android and iOS using React Native. I create apps that are easy to use and provide a great user experience.",
-    },
-    {
-        name: "SEO & Marketing",
-        icon: "bx:bx-line-chart",
-        desc: "I optimize websites for search engines to improve their visibility and ranking. I create digital marketing strategies to help businesses reach their target audience.",
-    },
+    // {
+    //     name: "Mobile Development",
+    //     icon: "bx:bx-mobile",
+    //     desc: "I develop mobile applications for both Android and iOS using React Native. I create apps that are easy to use and provide a great user experience.",
+    // },
+    // {
+    //     name: "SEO & Marketing",
+    //     icon: "bx:bx-line-chart",
+    //     desc: "I optimize websites for search engines to improve their visibility and ranking. I create digital marketing strategies to help businesses reach their target audience.",
+    // },
     
 ]
