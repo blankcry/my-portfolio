@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function ProjectCardSkeleton() {
@@ -17,6 +17,11 @@ export function ProjectCardSkeleton() {
           <Skeleton className="h-6 w-12" />
         </div>
       </CardContent>
+      {/* Matches ProjectCard's footer so the grid doesn't jump when data lands. */}
+      <CardFooter className="gap-2">
+        <Skeleton className="h-9 w-full" />
+        <Skeleton className="h-9 w-full" />
+      </CardFooter>
     </Card>
   );
 }

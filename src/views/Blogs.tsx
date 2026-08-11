@@ -2,7 +2,7 @@ function Blogs() {
   return (
     <section
       id="blogs"
-      className="w-full h-screen snap-start flex flex-col gap-4 px-4 md:px-14"
+      className="w-full min-h-[100dvh] flex flex-col gap-4 px-4 md:px-14 py-8"
     >
       <div
         id="Heading"

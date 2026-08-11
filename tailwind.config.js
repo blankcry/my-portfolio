@@ -92,8 +92,8 @@ export default {
   			},
   		},
   		animation: {
-  			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'accordion-down': 'accordion-down 0.32s cubic-bezier(0.32, 0.72, 0, 1)',
+  			'accordion-up': 'accordion-up 0.32s cubic-bezier(0.32, 0.72, 0, 1)',
   			'spin-slow': 'spin-slow 20s linear infinite',
   			'float': 'float 3s ease-in-out infinite',
   			'float-delayed': 'float 3s ease-in-out 1.5s infinite',

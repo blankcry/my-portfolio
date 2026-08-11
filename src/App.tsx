@@ -1,4 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { SmoothScrollProvider } from "@/components/scroll/SmoothScrollProvider";
+import Preloader from "@/components/preloader/Preloader";
+import HeroPortraitLayer from "@/components/hero/HeroPortraitLayer";
 import Navbar from "@/components/Navbar";
 import Home from "@/views/Home";
 import About from "@/views/About";
@@ -11,18 +14,24 @@ import Blogs from "@/views/Blogs";
 function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-      <div className="flex flex-col md:flex-row min-h-screen bg-background text-foreground">
-        <Navbar />
-        <main className="flex-1 overflow-y-auto snap-y snap-mandatory h-screen bg-white text-black dark:bg-black dark:text-white">
-          <Home />
-          <About />
-          <Experience />
-          <Services />
-          <Works />
-          <Contacts />
-          <Blogs />
-        </main>
-      </div>
+      <SmoothScrollProvider>
+        <Preloader />
+        <div className="min-h-[100dvh] bg-background text-foreground">
+          <Navbar />
+          {/* Scrolling happens on the window, not here — `relative` makes this
+              the coordinate space for the document-spanning hero layer. */}
+          <main className="relative md:ml-56 bg-white text-black dark:bg-black dark:text-white">
+            <HeroPortraitLayer />
+            <Home />
+            <About />
+            <Experience />
+            <Services />
+            <Works />
+            <Contacts />
+            <Blogs />
+          </main>
+        </div>
+      </SmoothScrollProvider>
     </ThemeProvider>
   );
 }
