@@ -13,6 +13,8 @@ import { useHoverIntent } from "@/hooks/useHoverIntent";
 import { ExperienceItemSkeleton } from "@/components/ExperienceItemSkeleton";
 import { CompanyLogo } from "@/components/experience/CompanyLogo";
 import { LogoMarquee } from "@/components/experience/LogoMarquee";
+import { ScrollAffordance } from "@/components/experience/ScrollAffordance";
+import { useReveal } from "@/hooks/useReveal";
 import { useSmoothScroll } from "@/components/scroll/SmoothScrollProvider";
 import { gsap, useGSAP } from "@/lib/gsap";
 
@@ -31,6 +33,10 @@ function Experience() {
   const cardRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const crossfade = useRef<gsap.core.Timeline | null>(null);
+
+  // Re-runs when the rows land, so the accordion column isn't revealed while
+  // it is still a stack of skeletons.
+  useReveal(rootRef, { enabled: motionEnabled, dependencies: [loading] });
 
   const focused = experience.find((e) => e.id === focusId);
 
@@ -98,15 +104,23 @@ function Experience() {
   };
 
   return (
-    <section id="experience" ref={rootRef} className="w-full flex flex-col gap-8">
-      <div className="gradient md:rounded-t-[7rem] rounded-xl w-full px-4 md:px-24 py-8 md:py-12 flex flex-col gap-8 text-white">
-        <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-16">
-          {/* ---- Left: bio, replaced by the hovered company's card ---- */}
-          <div className="w-full md:w-[50%] min-w-0 font-ibm flex flex-col gap-4">
-            <span className="italic font-semibold text-sm md:text-base">Experience</span>
-            <span className="text-2xl md:text-4xl font-extrabold">MY EXPERIENCE</span>
+    <section
+      id="experience"
+      ref={rootRef}
+      className="flex section-vh w-full flex-col overflow-hidden"
+    >
+      <div className="flex h-full w-full flex-col gap-4 px-4 py-6 md:gap-6 md:px-16 md:py-10">
+        <div data-reveal className="flex flex-col gap-1">
+          <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+            /Experience
+          </span>
+          <span className="text-2xl font-bold uppercase md:text-4xl">Where I've built</span>
+        </div>
 
-            <div className="relative min-h-[340px]">
+        <div className="flex min-h-0 flex-1 flex-col justify-between gap-6 md:flex-row md:gap-16">
+          {/* ---- Left: bio, replaced by the hovered company's card ---- */}
+          <div className="flex w-full min-w-0 flex-col gap-3 font-ibm md:w-[50%]">
+            <div data-reveal className="relative hidden min-h-[260px] flex-1 md:block">
               <div ref={bioRef} className="absolute inset-0 text-sm md:text-base">
                 I'm a full stack developer working mainly in JavaScript across
                 backend and frontend, with Python for backend services. I've built
@@ -120,7 +134,7 @@ function Experience() {
               <div
                 ref={cardRef}
                 aria-hidden={!focused}
-                className="absolute inset-0 flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm opacity-0"
+                className="absolute inset-0 flex flex-col gap-4 rounded-2xl border border-black/10 bg-black/[0.04] p-6 opacity-0 backdrop-blur-sm dark:border-white/15 dark:bg-white/[0.06]"
               >
                 {focused && (
                   <>
@@ -155,12 +169,18 @@ function Experience() {
 
           {/* ---- Right: the accordion ---- */}
           <div
+            data-reveal
+            className="relative flex min-h-0 w-full min-w-0 flex-1 md:w-[50%] md:flex-none"
+          >
+          <div
             ref={listRef}
             data-lenis-prevent
-            className="w-full md:w-[50%] min-w-0 md:h-[70vh] md:overflow-y-auto md:pr-2"
+            className="min-h-0 w-full min-w-0 flex-1 overflow-y-auto pr-10 md:pr-12"
             style={{
               // Fixed height means opening a panel never changes document
-              // height — no ScrollTrigger refresh, no jump mid-hover.
+              // height — no ScrollTrigger refresh, no jump mid-hover. The
+              // section is now exactly one viewport, so this list absorbs the
+              // remaining space rather than growing the page.
               maskImage:
                 "linear-gradient(to bottom, transparent, black 4%, black 96%, transparent)",
               WebkitMaskImage:
@@ -178,7 +198,7 @@ function Experience() {
             >
               {loading &&
                 Array.from({ length: 5 }).map((_, i) => <ExperienceItemSkeleton key={i} />)}
-              {error && <p className="text-white">Error fetching experience: {error}</p>}
+              {error && <p>Error fetching experience: {error}</p>}
               {!loading &&
                 !error &&
                 experience.map((exp) => (
@@ -194,7 +214,7 @@ function Experience() {
                     // open — forcing it would break Radix's toggle on Enter.
                     onFocus={() => setFocusId(exp.id)}
                   >
-                    <AccordionTrigger className="justify-end gap-2 bg-transparent text-white">
+                    <AccordionTrigger className="justify-end gap-2 bg-transparent">
                       <div className="flex w-full items-center gap-3">
                         <CompanyLogo
                           company={exp.company}
@@ -243,14 +263,24 @@ function Experience() {
                 ))}
             </Accordion>
           </div>
+
+            {!loading && !error && (
+              <ScrollAffordance
+                targetRef={listRef}
+                className="absolute inset-y-2 right-0 z-10"
+              />
+            )}
+          </div>
         </div>
 
         {!loading && !error && (
-          <LogoMarquee
-            items={experience}
-            motionEnabled={motionEnabled}
-            onSelect={selectFromMarquee}
-          />
+          <div className="shrink-0">
+            <LogoMarquee
+              items={experience}
+              motionEnabled={motionEnabled}
+              onSelect={selectFromMarquee}
+            />
+          </div>
         )}
       </div>
     </section>

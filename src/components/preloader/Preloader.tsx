@@ -22,6 +22,12 @@ function shouldPlayIntro() {
   }
 }
 
+/**
+ * Counter + wipe only — no portrait handoff. The falling-portrait scrub this
+ * used to hand off into was retired (Home no longer scrubs its portrait into
+ * About); Home now runs its own on-mount entrance timeline once `introDone`
+ * flips, gated the same way this component already gates itself.
+ */
 export function Preloader() {
   const { setIntroDone, lockScroll, motionEnabled } = useSmoothScroll();
   const [play] = useState(() => motionEnabled && shouldPlayIntro());
@@ -49,40 +55,6 @@ export function Preloader() {
       window.scrollTo(0, 0);
       lockScroll(true);
 
-      const proxy = document.querySelector<HTMLImageElement>("[data-hero-proxy]");
-      const homeSlot = document.querySelector<HTMLElement>('[data-hero-slot="home"]');
-      const layer = proxy?.parentElement;
-
-      /** Rect of `el` expressed in the hero layer's own coordinate space. */
-      const rectIn = (el: HTMLElement) => {
-        const l = layer!.getBoundingClientRect();
-        const r = el.getBoundingClientRect();
-        return { x: r.left - l.left, y: r.top - l.top, width: r.width, height: r.height };
-      };
-
-      // Park the portrait small and centred in the viewport before first paint.
-      if (proxy && layer) {
-        const l = layer.getBoundingClientRect();
-        const size = Math.min(window.innerWidth, window.innerHeight) * 0.34;
-        gsap.set(proxy, {
-          width: size,
-          height: size,
-          x: window.innerWidth / 2 - l.left - size / 2,
-          y: window.innerHeight / 2 - l.top - size / 2,
-          autoAlpha: 0,
-          scale: 0.85,
-          clipPath: "circle(0% at 50% 50%)",
-        });
-      }
-
-      // Kick decode off now so it overlaps the counter and is usually free.
-      const decoded: Promise<unknown> = proxy
-        ? Promise.race([
-            proxy.decode().catch(() => undefined),
-            new Promise((r) => setTimeout(r, 2500)),
-          ])
-        : Promise.resolve();
-
       const counter = { v: 0 };
       const tl = gsap.timeline({
         defaults: { ease: "power2.out" },
@@ -98,7 +70,7 @@ export function Preloader() {
         counter,
         {
           v: 100,
-          duration: 1.6,
+          duration: 1.4,
           ease: "power2.inOut",
           snap: { v: 1 },
           onUpdate: () => {
@@ -110,53 +82,11 @@ export function Preloader() {
         0
       );
 
-      if (proxy) {
-        tl.to(
-          proxy,
-          {
-            autoAlpha: 1,
-            scale: 1,
-            clipPath: "circle(75% at 50% 50%)",
-            duration: 1.1,
-            ease: "power3.out",
-          },
-          0.25
-        );
-      }
-
-      // Hold the exit until the portrait can actually paint — otherwise the
-      // circle reveals onto a blank hole on a slow connection. A timeline can't
-      // await a promise, so pause the playhead and resume it from the promise.
-      tl.addPause(">", () => {
-        decoded.then(() => tl.play());
-      });
-
-      // Exit: the portrait flies into its slot as the overlay wipes upward.
-      // Function-based values so the rect is read at execution time, not build
-      // time — fonts and images may still have shifted the layout by then.
-      if (proxy && homeSlot && layer) {
-        tl.to(
-          proxy,
-          {
-            x: () => rectIn(homeSlot).x,
-            y: () => rectIn(homeSlot).y,
-            width: () => rectIn(homeSlot).width,
-            height: () => rectIn(homeSlot).height,
-            duration: 0.9,
-            ease: "power4.inOut",
-          },
-          ">"
-        );
-      }
-
+      // Wipe the overlay away; Home's own entrance timeline takes it from here.
       tl.to(
         rootRef.current,
         { clipPath: "inset(0 0 100% 0)", duration: 0.8, ease: "power4.inOut" },
-        "<0.1"
-      ).from(
-        "[data-hero-copy] > *",
-        { y: 40, autoAlpha: 0, stagger: 0.08, duration: 0.7 },
-        "<0.25"
+        ">-0.1"
       );
 
       return () => {

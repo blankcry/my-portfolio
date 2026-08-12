@@ -2,11 +2,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
   type ReactNode,
 } from "react";
+import { useLocation } from "react-router-dom";
 import Lenis from "lenis";
 import {
   MOBILE_HEADER_H,
@@ -27,9 +29,18 @@ interface SmoothScrollValue {
   motionEnabled: boolean;
   introDone: boolean;
   setIntroDone: (v: boolean) => void;
+  /**
+   * True once the hero portrait has begun its flight into About. About has no
+   * picture of its own until this flips — it opens a slot for the incoming
+   * portrait, which shifts the surrounding text down to make room.
+   */
+  heroPortraitArrived: boolean;
+  setHeroPortraitArrived: (v: boolean) => void;
   lockScroll: (locked: boolean) => void;
   /** Debounced, paint-deferred, snap-aware `ScrollTrigger.refresh()`. */
   requestRefresh: () => void;
+  /** True only on the one-pager route, where hard section snapping applies. */
+  snapEnabled: boolean;
 }
 
 const SmoothScrollContext = createContext<SmoothScrollValue | null>(null);
@@ -45,16 +56,23 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const isSnappingRef = useRef(false);
   const refreshTimer = useRef<number | undefined>(undefined);
   const isMobile = useIsMobile();
+  const { pathname } = useLocation();
 
   const [motionEnabled] = useState(() => !prefersReducedMotion());
   const [activeSection, setActiveSection] = useState<SectionId | "">("");
   const [introDone, setIntroDone] = useState(false);
+  const [heroPortraitArrived, setHeroPortraitArrived] = useState(false);
+
+  // Section snapping only makes sense on the one-pager. /work and /work/:slug
+  // are ordinary documents that should scroll normally.
+  const isHome = pathname === "/";
+  const snapEnabled = motionEnabled && isHome;
 
   const requestRefresh = useCallback(() => {
     const schedule = () => {
       window.clearTimeout(refreshTimer.current);
       refreshTimer.current = window.setTimeout(() => {
-        // Refreshing mid-snap yanks the scroll position; wait the snap out.
+        // Refreshing mid-transition yanks the scroll position; wait it out.
         if (isSnappingRef.current) return schedule();
         // Two frames: laid out, then painted.
         requestAnimationFrame(() => requestAnimationFrame(() => ScrollTrigger.refresh()));
@@ -72,8 +90,6 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   // --- Lenis + the GSAP ticker ------------------------------------------------
   useGSAP(() => {
     // Don't let the browser restore a mid-page scroll position on reload.
-    // Forcing the top is the Preloader's job, and only when the intro plays —
-    // otherwise `/#works`-style deep links would be broken.
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
     // Reduced motion: no Lenis at all, native scroll only.
@@ -82,8 +98,11 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     const lenis = new Lenis({
       duration: 1.05,
       easing: SCROLL_EASE,
+      // smoothWheel is toggled per-route below: on the snapping one-pager the
+      // hard-lock hook owns wheel input entirely and translates each gesture
+      // into exactly one section jump, so Lenis must not also convert wheel
+      // deltas into free scrolling.
       smoothWheel: true,
-      // Native touch on mobile: better perf, and no fight with rubber-banding.
       syncTouch: false,
       touchMultiplier: 1.6,
       autoRaf: false,
@@ -105,6 +124,14 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  // Hand wheel ownership to the snap hook on the one-pager, give it back on
+  // ordinary routes.
+  useEffect(() => {
+    const lenis = lenisRef.current;
+    if (!lenis) return;
+    lenis.options.smoothWheel = !snapEnabled;
+  }, [snapEnabled]);
+
   // --- Toggling the OS setting mid-session: just reload -----------------------
   useGSAP(() => {
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -113,16 +140,22 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     return () => mql.removeEventListener("change", onChange);
   }, []);
 
-  // Declared after the Lenis effect so `lenisRef.current` is already populated:
-  // layout effects run in hook order, and these are passive/layout effects that
-  // follow it.
+  // Declared after the Lenis effect so `lenisRef.current` is already populated.
   useSectionSnap(lenisRef, {
-    enabled: motionEnabled,
+    enabled: snapEnabled,
     isSnappingRef,
     offset: isMobile ? MOBILE_HEADER_H : 0,
   });
 
-  useActiveSection(setActiveSection);
+  useActiveSection(setActiveSection, isHome);
+
+  // --- Route changes: back to the top, and re-measure -------------------------
+  useEffect(() => {
+    isSnappingRef.current = false;
+    lenisRef.current?.scrollTo(0, { immediate: true, force: true });
+    window.scrollTo(0, 0);
+    requestRefresh();
+  }, [pathname, requestRefresh]);
 
   // --- Safety net for layout changes we didn't explicitly account for ---------
   useGSAP(() => {
@@ -155,7 +188,8 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
         offset,
         duration: 1.1,
         easing: SCROLL_EASE,
-        lock: false,
+        lock: true,
+        force: true,
         onComplete: () => {
           isSnappingRef.current = false;
         },
@@ -171,10 +205,22 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       motionEnabled,
       introDone,
       setIntroDone,
+      heroPortraitArrived,
+      setHeroPortraitArrived,
       lockScroll,
       requestRefresh,
+      snapEnabled,
     }),
-    [activeSection, scrollToSection, motionEnabled, introDone, lockScroll, requestRefresh]
+    [
+      activeSection,
+      scrollToSection,
+      motionEnabled,
+      introDone,
+      heroPortraitArrived,
+      lockScroll,
+      requestRefresh,
+      snapEnabled,
+    ]
   );
 
   return (

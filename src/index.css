@@ -77,6 +77,27 @@
   .gradient {
     @apply bg-gradient-to-r from-[#344054] to-[#34A853] hover:from-[#34A853] hover:to-[#344054] transition duration-500 ease-linear hover:-translate-y-1
   }
+  /*
+   * Hollow/outline headline type (Home hero). Two things this has to avoid:
+   *  1. -webkit-text-stroke has no Firefox support, so the transparent fill
+   *     is gated behind @supports — Firefox gets solid text instead of
+   *     invisible text.
+   *  2. `currentColor` for the stroke is a trap here: it resolves against
+   *     THIS element's own `color`, which the @supports block sets to
+   *     transparent for the fill — so a stroke of `currentColor` would
+   *     resolve to transparent too, and the whole word disappears. Using the
+   *     theme's `--foreground` variable directly for the stroke sidesteps
+   *     the self-reference while still tracking light/dark automatically.
+   */
+  .text-stroke {
+    color: hsl(var(--foreground));
+  }
+  @supports (-webkit-text-stroke: 1px black) {
+    .text-stroke {
+      color: transparent;
+      -webkit-text-stroke: 1.5px hsl(var(--foreground));
+    }
+  }
 }
 
 @layer base {
@@ -84,4 +105,96 @@
   html {
     scroll-behavior: auto;
   }
+
+  :root {
+    /*
+     * Height of the sticky mobile header. It sits in normal flow above <main>
+     * and stays pinned, so it permanently covers the top of whatever section
+     * is snapped into view. Sections subtract it (see .section-vh) or they
+     * overflow the viewport by exactly this much. Must stay in sync with
+     * MOBILE_HEADER_H in src/lib/gsap.ts, which offsets every snap target.
+     */
+    --nav-h: 4rem;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      /* Desktop nav is a fixed side rail — it takes no vertical space. */
+      --nav-h: 0px;
+    }
+  }
+}
+
+@layer utilities {
+  /* Exactly one usable viewport for a snapping section. */
+  .section-vh {
+    height: calc(100dvh - var(--nav-h));
+  }
+
+  /*
+   * Shared primary-button hover: the button hops up and settles, rather than
+   * just scaling. The back-out timing function overshoots slightly past the
+   * final position before settling, which is what reads as a "jump" instead
+   * of a slide. Used by Contact Me, Explore My Work and View My Experience so
+   * every primary action behaves identically.
+   */
+  .btn-jump {
+    transition:
+      transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.35s ease;
+  }
+  .btn-jump:hover,
+  .btn-jump:focus-visible {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px -8px rgb(0 0 0 / 0.45);
+  }
+  .btn-jump:active {
+    transform: translateY(-2px);
+    transition-duration: 0.1s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-jump,
+    .btn-jump:hover,
+    .btn-jump:focus-visible,
+    .btn-jump:active {
+      transform: none;
+      transition: box-shadow 0.2s ease;
+    }
+  }
+}
+
+/*
+ * The single background for the whole site. Every section is transparent now,
+ * so this is the only thing painting behind content: a white (or near-black)
+ * base washed with low-alpha tints of the brand gradient's two stops,
+ * #344054 and #34A853.
+ *
+ * A fixed pseudo-element rather than `background-attachment: fixed`, which is
+ * unreliable on mobile Safari and repaints the whole backdrop every scroll
+ * frame. A fixed layer composites once and simply stays put while sections
+ * snap past it.
+ */
+.app-canvas {
+  position: relative;
+  background-color: hsl(var(--background));
+}
+
+.app-canvas::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(70% 55% at 10% -8%, rgba(52, 168, 83, 0.13), transparent 70%),
+    radial-gradient(60% 50% at 90% 10%, rgba(52, 64, 84, 0.14), transparent 72%),
+    radial-gradient(70% 55% at 50% 110%, rgba(52, 168, 83, 0.10), transparent 70%);
+}
+
+.dark .app-canvas::before {
+  /* Tints have to work harder to register against a near-black base. */
+  background-image:
+    radial-gradient(70% 55% at 10% -8%, rgba(52, 168, 83, 0.20), transparent 70%),
+    radial-gradient(60% 50% at 90% 10%, rgba(80, 100, 130, 0.18), transparent 72%),
+    radial-gradient(70% 55% at 50% 110%, rgba(52, 168, 83, 0.14), transparent 70%);
 }

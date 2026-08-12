@@ -1,3 +1,5 @@
+// LEGACY — superseded 2026-08 (Selected Work redesign / Contacts redesign).
+// Not imported anywhere. Kept for reference / easy revert.
 import { useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { ProjectCardBody } from "@/components/ProjectCard";

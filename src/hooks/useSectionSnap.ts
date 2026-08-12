@@ -1,19 +1,27 @@
 import { useEffect } from "react";
 import type Lenis from "lenis";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { ScrollTrigger } from "@/lib/gsap";
 import { SECTION_IDS, SCROLL_EASE } from "@/lib/sections";
 
-/** Only snap when a boundary is this close — the magnetic-vs-trapping knob. */
-const CAPTURE_RATIO = 0.35;
-/** Quiet period after the last scroll event before we consider snapping. */
-const SETTLE_MS = 90;
-/** Skip while the user is still flinging. */
-const VELOCITY_MAX = 0.15;
-const MIN_DELTA = 4;
-/** Never snap right at the top/bottom of the document. */
-const EDGE_GUARD = 80;
-/** Boundaries in the direction of travel are preferred by this factor. */
-const DIRECTIONAL_BIAS = 0.6;
+/** One gesture moves exactly one section. */
+const TRANSITION_S = 0.85;
+/**
+ * Home <-> About is deliberately slower than every other move. The hero
+ * portrait travels between those two sections during the transition, and at
+ * the normal speed it reads as a jump-cut rather than a journey. The portrait
+ * animation reads this same constant so the two stay locked together.
+ */
+export const PORTRAIT_TRANSITION_S = 1.8;
+/** Ignore wheel noise below this — trackpads emit tiny deltas constantly. */
+const DELTA_THRESHOLD = 12;
+/**
+ * Quiet period after a transition finishes. Trackpad inertia keeps firing wheel
+ * events for a while after the finger lifts; without this the tail of one flick
+ * would immediately trigger the next section.
+ */
+const COOLDOWN_MS = 260;
+/** Minimum vertical swipe distance to count as a section change. */
+const SWIPE_PX = 45;
 
 interface Options {
   enabled: boolean;
@@ -23,12 +31,14 @@ interface Options {
 }
 
 /**
- * Magnetic section snapping.
+ * Hard section lock — one wheel gesture, swipe, or arrow key advances exactly
+ * one section, and the page never rests part-way between two.
  *
- * Snapping goes through `lenis.scrollTo(..., { lock: false })` rather than
- * ScrollTrigger's built-in `snap`, because ScrollTrigger writes `window.scrollTo`
- * directly — a second writer alongside Lenis, which produces the classic
- * "snaps, then jumps back". Rule: Lenis is the only thing that writes scroll.
+ * This replaces the earlier "magnetic" behaviour (free scrolling that settled
+ * onto a nearby boundary). Because the page must never free-scroll, we
+ * preventDefault every wheel event and drive the transition ourselves through
+ * `lenis.scrollTo`, rather than letting Lenis translate wheel input into
+ * scroll. Lenis is still the only thing that writes scroll position.
  */
 export function useSectionSnap(
   lenisRef: React.MutableRefObject<Lenis | null>,
@@ -39,114 +49,118 @@ export function useSectionSnap(
     if (!enabled || !lenis) return;
 
     let boundaries: number[] = [];
-    let dir: 1 | -1 = 1;
-    let timer: number | undefined;
-    let pointerDown = false;
-
-    const capture = () => CAPTURE_RATIO * window.innerHeight;
+    let index = 0;
+    let cooldownUntil = 0;
 
     const measure = () => {
       const vh = window.innerHeight;
-      // Backgrounded/zero-size viewports report 0; every boundary would be bogus.
       if (vh === 0) return;
       const max = Math.max(0, document.documentElement.scrollHeight - vh);
-      const clamp = gsap.utils.clamp(0, max);
       const next: number[] = [];
-
       for (const id of SECTION_IDS) {
         const el = document.getElementById(id);
         if (!el) continue;
         const top = el.getBoundingClientRect().top + window.scrollY - offset;
-        next.push(clamp(top));
-        // Sections taller than the viewport get a second resting point aligned
-        // to their end, so their long middle stretch stays free-scrolling.
-        if (el.offsetHeight > vh * 1.2) next.push(clamp(top + el.offsetHeight - vh));
+        next.push(Math.min(Math.max(0, top), max));
       }
-
       boundaries = [...new Set(next)].sort((a, b) => a - b);
+      index = nearestIndex(window.scrollY);
     };
 
-    const nearest = (y: number) => {
-      const cap = capture();
-      let best: number | null = null;
-      let bestCost = Infinity;
-
-      for (const b of boundaries) {
-        const delta = b - y;
-        if (Math.abs(delta) > cap) continue;
-        const cost = Math.abs(delta) * (Math.sign(delta) === dir ? DIRECTIONAL_BIAS : 1);
-        if (cost < bestCost) {
-          bestCost = cost;
-          best = b;
+    const nearestIndex = (y: number) => {
+      let best = 0;
+      let bestDist = Infinity;
+      boundaries.forEach((b, i) => {
+        const d = Math.abs(b - y);
+        if (d < bestDist) {
+          bestDist = d;
+          best = i;
         }
-      }
+      });
       return best;
     };
 
-    const trySnap = () => {
-      if (isSnappingRef.current || pointerDown) return;
-      if (window.innerHeight === 0 || !boundaries.length) return;
-      if (Math.abs(lenis.velocity) > VELOCITY_MAX) return;
+    const goTo = (target: number) => {
+      if (!boundaries.length) return;
+      const clamped = Math.min(Math.max(0, target), boundaries.length - 1);
+      if (clamped === index && isSnappingRef.current) return;
 
-      const y = window.scrollY;
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (y < EDGE_GUARD || y > max - EDGE_GUARD) return;
+      // Slow the one transition that carries the portrait between sections.
+      const between = new Set([index, clamped]);
+      const carriesPortrait = between.has(0) && between.has(1);
 
-      const target = nearest(y);
-      if (target === null || Math.abs(target - y) < MIN_DELTA) return;
-
-      const ratio = Math.min(1, Math.abs(target - y) / capture());
+      index = clamped;
       isSnappingRef.current = true;
-      lenis.scrollTo(target, {
-        duration: 0.45 + 0.45 * ratio,
+      lenis.scrollTo(boundaries[clamped], {
+        duration: carriesPortrait ? PORTRAIT_TRANSITION_S : TRANSITION_S,
         easing: SCROLL_EASE,
-        lock: false,
+        // lock: the whole point is that input can't interrupt mid-transition.
+        lock: true,
+        force: true,
         onComplete: () => {
+          cooldownUntil = performance.now() + COOLDOWN_MS;
           isSnappingRef.current = false;
         },
       });
     };
 
-    const onScroll = (instance: Lenis) => {
-      if (isSnappingRef.current) return;
-      if (instance.velocity) dir = instance.velocity > 0 ? 1 : -1;
-      window.clearTimeout(timer);
-      timer = window.setTimeout(trySnap, SETTLE_MS);
+    const busy = () => isSnappingRef.current || performance.now() < cooldownUntil;
+
+    const onWheel = (e: WheelEvent) => {
+      // Let genuinely scrollable inner regions (the Experience list, the mobile
+      // work rail) keep their own scrolling.
+      if ((e.target as HTMLElement | null)?.closest?.("[data-lenis-prevent]")) return;
+      e.preventDefault();
+      if (busy() || Math.abs(e.deltaY) < DELTA_THRESHOLD) return;
+      goTo(index + (e.deltaY > 0 ? 1 : -1));
     };
 
-    // Fresh user input aborts an in-flight snap. This is the whole difference
-    // between "magnetic" and "trapped".
-    const cancel = () => {
-      if (!isSnappingRef.current) return;
-      isSnappingRef.current = false;
-      lenis.scrollTo(lenis.animatedScroll, { immediate: true, force: true });
+    let touchStartY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0]?.clientY ?? 0;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if ((e.target as HTMLElement | null)?.closest?.("[data-lenis-prevent]")) return;
+      e.preventDefault();
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      if ((e.target as HTMLElement | null)?.closest?.("[data-lenis-prevent]")) return;
+      if (busy()) return;
+      const delta = touchStartY - (e.changedTouches[0]?.clientY ?? touchStartY);
+      if (Math.abs(delta) < SWIPE_PX) return;
+      goTo(index + (delta > 0 ? 1 : -1));
     };
 
-    const onTouchStart = () => {
-      pointerDown = true;
-      cancel();
-    };
-    const onTouchEnd = () => {
-      pointerDown = false;
+    const onKeyDown = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement | null)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      const forward = ["ArrowDown", "PageDown", " "].includes(e.key);
+      const back = ["ArrowUp", "PageUp"].includes(e.key);
+      if (!forward && !back && e.key !== "Home" && e.key !== "End") return;
+      e.preventDefault();
+      if (busy()) return;
+      if (e.key === "Home") return goTo(0);
+      if (e.key === "End") return goTo(boundaries.length - 1);
+      goTo(index + (forward ? 1 : -1));
     };
 
-    lenis.on("scroll", onScroll);
-    ScrollTrigger.addEventListener("refresh", measure);
-    window.addEventListener("wheel", cancel, { passive: true });
+    // passive:false is required — these handlers call preventDefault.
+    window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
     window.addEventListener("touchend", onTouchEnd, { passive: true });
-    window.addEventListener("keydown", cancel);
+    window.addEventListener("keydown", onKeyDown);
+    ScrollTrigger.addEventListener("refresh", measure);
     window.addEventListener("resize", measure);
     measure();
 
     return () => {
-      window.clearTimeout(timer);
-      lenis.off("scroll", onScroll);
-      ScrollTrigger.removeEventListener("refresh", measure);
-      window.removeEventListener("wheel", cancel);
+      window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
-      window.removeEventListener("keydown", cancel);
+      window.removeEventListener("keydown", onKeyDown);
+      ScrollTrigger.removeEventListener("refresh", measure);
       window.removeEventListener("resize", measure);
     };
   }, [enabled, lenisRef, isSnappingRef, offset]);

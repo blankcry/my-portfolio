@@ -1,3 +1,7 @@
+/** Filter tabs on the Works section and the /work listing page. */
+export const PROJECT_CATEGORIES = ["Web App", "Mobile", "E-commerce"] as const;
+export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
+
 export interface Project {
   id: string;
   name: string;
@@ -7,6 +11,12 @@ export interface Project {
   stack: string[];
   photo_url: string[];
   type: string | null;
+  /** What was delivered — "Service" on the detail page. Null falls back to a value derived from `stack`. */
+  service: string | null;
+  /** How long it took — "Timeline" on the detail page. Null hides that row. */
+  timeline: string | null;
+  /** Drives the filter tabs. Null is treated as "Web App". */
+  category: ProjectCategory | null;
   order_index: number;
   is_published: boolean;
   created_at: string;

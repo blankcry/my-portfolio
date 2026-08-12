@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import HeroImage from "@/assets/heroImage.webp";
 import NorthEast from "@/assets/north_east.svg";
 import NorthEastBlack from "@/assets/north_east_black.svg";
@@ -6,144 +7,174 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useSmoothScroll } from "@/components/scroll/SmoothScrollProvider";
 import { useReveal } from "@/hooks/useReveal";
-import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 
 dayjs.extend(relativeTime);
 
+/**
+ * Trimmed to fit exactly one viewport, since sections now snap hard and must
+ * not overflow. The four-bullet capability card that used to sit at the bottom
+ * was dropped — it restated what the Services section already covers.
+ */
 function About() {
   const rootRef = useRef<HTMLElement>(null);
-  const { scrollToSection, motionEnabled } = useSmoothScroll();
+  const slotRef = useRef<HTMLDivElement>(null);
+  const { scrollToSection, motionEnabled, heroPortraitArrived } = useSmoothScroll();
   const experienceInYears = dayjs("2020-01-01").toNow(true).split(" ")[0];
   useReveal(rootRef, { enabled: motionEnabled });
 
+  // Open (or re-collapse) the portrait slot. Animating height rather than
+  // toggling it is the point: the surrounding text visibly slides down to make
+  // room, which is what sells the portrait as having travelled here.
+  useGSAP(
+    () => {
+      const slot = slotRef.current;
+      if (!slot) return;
+
+      if (!heroPortraitArrived) {
+        gsap.set(slot, { height: 0, opacity: 0 });
+        return;
+      }
+
+      gsap.to(slot, {
+        height: "auto",
+        opacity: 1,
+        duration: motionEnabled ? 0.5 : 0,
+        ease: "power3.out",
+      });
+    },
+    { dependencies: [heroPortraitArrived, motionEnabled], scope: rootRef }
+  );
+
   return (
-    <section id="about" ref={rootRef} className="w-full flex flex-col gap-8 min-h-[100dvh]">
-      <div
-        id="Heading"
-        className="flex flex-col gap-4 w-full text-left px-4 md:px-24 py-8 md:py-12 pb-0"
-      >
-        <span data-reveal className="capitalize italic text-base md:text-lg font-semibold">
-          nice to meet you!
+    <section
+      id="about"
+      ref={rootRef}
+      className="flex section-vh w-full flex-col justify-center gap-4 overflow-hidden px-4 py-6 md:gap-6 md:px-16 md:py-10"
+    >
+      <div data-reveal className="flex flex-col gap-1">
+        <span className="text-xs uppercase tracking-[0.3em] text-gray-500">
+          /About
         </span>
-        <span data-reveal className="uppercase font-bold text-3xl md:text-4xl">
-          you can call me....
+        <span className="text-2xl font-bold uppercase md:text-4xl">
+          You can call me....
         </span>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-evenly gap-8 md:gap-12 w-full px-4 md:px-24 pb-12">
-        {/* ---- Identity column ---- */}
-        <div className="flex flex-col gap-4 w-full min-w-0 text-center items-center font-ibm">
+      <div className="flex min-h-0 flex-col items-center gap-4 md:flex-row md:gap-12">
+        {/* ---- Identity ---- */}
+        {/*
+         * Deliberately NOT data-reveal: this column holds [data-about-avatar],
+         * which HeroPortraitMorph flies the hero portrait into. A merge target
+         * that is itself being animated is a moving target — the flight would
+         * measure a position the avatar is about to leave and land offset by
+         * the reveal's travel. The pieces inside reveal individually instead,
+         * so the avatar's box stays put.
+         */}
+        <div className="flex w-full min-w-0 shrink-0 flex-col items-center gap-2 text-center font-ibm md:gap-3 md:w-auto">
           {/*
-           * Landing pad for the portrait scrubbed down from Home. The gradient
-           * ring stays; the image inside is owned by HeroPortraitLayer, which
-           * reveals this static copy once the scrub completes.
+           * About owns no picture of its own. The slot stays collapsed to zero
+           * height — contributing nothing to layout, so the text below sits at
+           * the top of the column — until the hero portrait flies in, at which
+           * point it opens and pushes the text down into its final position.
            */}
-          <div className="relative p-1 rounded-full gradient">
-            <div
-              data-hero-slot="about"
-              className="w-[min(280px,38vh)] md:w-[min(400px,30vw,52vh)] aspect-square rounded-full overflow-hidden"
-            >
-              <img
-                data-hero-resting
-                src={HeroImage}
-                className={`w-full h-full object-cover ${motionEnabled ? "opacity-0" : ""}`}
-                alt="James Yunana - Full Stack Developer"
-              />
+          <div ref={slotRef} className="overflow-hidden" style={{ height: 0, opacity: 0 }}>
+            <div className="rounded-full p-1 gradient">
+              {/* Merge target for the hero portrait's flight (HeroPortraitMorph). */}
+              <div
+                data-about-avatar
+                className="aspect-square w-[min(112px,15vh)] overflow-hidden rounded-full md:w-[min(260px,32vh)]"
+              >
+                {heroPortraitArrived && (
+                  <img
+                    src={HeroImage}
+                    className="h-full w-full object-cover"
+                    alt="James Yunana - Full Stack Developer"
+                  />
+                )}
+              </div>
             </div>
           </div>
 
-          <div>
-            <p className="gradient-text uppercase font-bold text-4xl md:text-5xl">
-              blankcry
-            </p>
-            <p className="text-base md:text-lg flex flex-wrap gap-x-2 justify-center items-center">
-              <span className="font-extrabold italic">Full Stack Developer</span>
-              <span>based in</span>
-              <Icon
-                icon="arcticons:emoji-flag-united-kingdom"
-                fill="green"
-                stroke="green"
-                className="w-6 h-6"
-              />
-              <span>— with an eye for detail</span>
-            </p>
-          </div>
+          <p data-reveal className="gradient-text text-3xl font-bold uppercase md:text-4xl">
+            blankcry
+          </p>
+          <p
+            data-reveal
+            className="flex flex-wrap items-center justify-center gap-x-2 text-sm md:text-base"
+          >
+            <span className="font-extrabold italic">Full Stack Developer</span>
+            <span>based in</span>
+            <Icon
+              icon="arcticons:emoji-flag-united-kingdom"
+              fill="green"
+              stroke="green"
+              className="h-5 w-5"
+            />
+          </p>
 
-          <div className="flex flex-col gap-4 items-center">
-            <hr className="w-[120px] h-[2px] border-0 bg-black dark:bg-white" />
-            <div className="flex gap-4">
+          <div data-reveal className="flex gap-3">
+            {[
+              { icon: "ic:round-facebook", href: "https://facebook.com/james-yunana", label: "Facebook" },
+              { icon: "ri:twitter-x-line", href: "https://x.com/james_yuna", label: "X" },
+              { icon: "ph:instagram-logo-thin", href: "https://instagram.com/james_yuna", label: "Instagram" },
+            ].map((s) => (
               <a
-                href="https://facebook.com/james-yunana"
-                aria-label="Facebook"
-                className="hover:opacity-80 transition-opacity hover:scale-110"
+                key={s.label}
+                href={s.href}
+                aria-label={s.label}
+                className="transition-opacity hover:opacity-70"
               >
-                <Icon icon="ic:round-facebook" width="24" height="24" />
+                <Icon icon={s.icon} width="20" height="20" />
               </a>
-              <a
-                href="https://x.com/james_yuna"
-                aria-label="X"
-                className="hover:opacity-80 transition-opacity hover:scale-110"
-              >
-                <Icon icon="ri:twitter-x-line" width="24" height="24" />
-              </a>
-              <a
-                href="https://instagram.com/james_yuna"
-                aria-label="Instagram"
-                className="hover:opacity-80 transition-opacity hover:scale-110"
-              >
-                <Icon icon="ph:instagram-logo-thin" width="24" height="24" />
-              </a>
-            </div>
+            ))}
           </div>
 
           <a
+            data-reveal
             href="https://docs.google.com/document/d/1P81SG_ILDA_xWMfAKbVF41KLqrmsuWcGYFdIqX0obsk/edit?usp=sharing"
-            className="flex gap-4 items-center"
+            className="flex items-center gap-2 text-sm"
           >
             <span className="underline dark:decoration-white">Download CV</span>
-            <img src={NorthEastBlack} alt="" width={20} height={20} />
+            <img src={NorthEastBlack} alt="" width={16} height={16} />
           </a>
         </div>
 
-        {/* ---- Narrative column: story → facts → proof → action ---- */}
-        <div className="flex flex-col w-full min-w-0 gap-8">
-          <p className="text-base md:text-lg text-gray-600 dark:text-gray-400">
-            I transform ideas into elegant, functional digital solutions. With
-            expertise in both frontend and backend development, I create seamless
-            web experiences that drive results.
+        {/* ---- Narrative ---- */}
+        <div className="flex w-full min-w-0 flex-col gap-3 md:gap-5">
+          <p data-reveal className="text-sm text-gray-600 dark:text-gray-400 md:text-lg">
+            I transform ideas into elegant, functional digital solutions. With expertise in
+            both frontend and backend development, I create seamless web experiences that
+            drive results.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <span className="flex gap-3 items-center text-sm md:text-base">
-              <Icon icon="el:phone-alt" width="20" height="20" className="md:w-6 md:h-6" />
+          <div data-reveal className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs sm:gap-3 sm:text-sm">
+            <span className="flex items-center gap-3">
+              <Icon icon="el:phone-alt" width="18" height="18" />
               +234 704 101 8558
             </span>
-            <span className="flex gap-3 items-center text-sm md:text-base">
-              <Icon
-                icon="iconamoon:profile-duotone"
-                width="20"
-                height="20"
-                className="md:w-6 md:h-6"
-              />
+            <span className="flex items-center gap-3">
+              <Icon icon="iconamoon:profile-duotone" width="18" height="18" />
               {dayjs().from(dayjs("1998-10-04"), true)}
             </span>
-            <span className="flex gap-3 items-center text-sm md:text-base">
-              <Icon icon="mdi:email-box" width="20" height="20" className="md:w-6 md:h-6" />
-              <span>gajejames@outlook.com</span>
+            <span className="flex items-center gap-3">
+              <Icon icon="mdi:email-box" width="18" height="18" />
+              gajejames@outlook.com
             </span>
-            <span className="flex gap-3 items-center text-sm md:text-base">
-              <Icon icon="dashicons:location" width="18" height="18" className="md:w-5 md:h-5" />
-              <span>Derby, United Kingdom</span>
+            <span className="flex items-center gap-3">
+              <Icon icon="dashicons:location" width="16" height="16" />
+              Derby, United Kingdom
             </span>
           </div>
 
-          <hr className="border-0 bg-black dark:bg-white h-[2px] w-full" />
+          <hr className="h-[2px] w-full border-0 bg-black dark:bg-white" />
 
-          <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-4">
-            {/* Years Experience */}
-            <div className="flex flex-col gap-4 w-full md:w-[50%]">
-              <p className="text-xs flex items-center gap-2">
-                <span className="gradient-text uppercase font-bold text-4xl md:text-5xl">
+          {/* Stats are the first thing to go on small screens — the section is a
+              hard viewport and the stacked mobile layout can't hold them. */}
+          <div data-reveal className="hidden gap-6 sm:flex sm:flex-row">
+            <div className="flex w-full flex-col gap-2">
+              <p className="flex items-center gap-2 text-xs">
+                <span className="gradient-text text-3xl font-bold uppercase md:text-4xl">
                   {experienceInYears}+
                 </span>
                 <span className="flex flex-col text-left font-bold italic">
@@ -151,15 +182,14 @@ function About() {
                   experience...
                 </span>
               </p>
-              <p className="text-sm md:text-base">
-                Design-minded engineer shipping production software since 2020,
-                across fintech and SaaS.
+              <p className="text-sm">
+                Design-minded engineer shipping production software since 2020, across
+                fintech and SaaS.
               </p>
             </div>
-            {/* Clients Number */}
-            <div className="flex flex-col gap-4 w-full md:w-[50%]">
-              <p className="text-xs flex items-center gap-2">
-                <span className="gradient-text uppercase font-bold text-4xl md:text-5xl">
+            <div className="flex w-full flex-col gap-2">
+              <p className="flex items-center gap-2 text-xs">
+                <span className="gradient-text text-3xl font-bold uppercase md:text-4xl">
                   10+
                 </span>
                 <span className="flex flex-col text-left font-bold italic">
@@ -167,44 +197,22 @@ function About() {
                   Worldwide...
                 </span>
               </p>
-              <p className="text-sm md:text-base">
-                With {experienceInYears}+ years experience as a professional
-                full-stack developer, I have acquired the skills and knowledge
-                necessary to make your project a success.
+              <p className="text-sm">
+                The skills and knowledge to make your project a success, end to end.
               </p>
             </div>
           </div>
 
-          <div className="bg-black dark:bg-white p-4 flex flex-col gap-2 text-white dark:text-black justify-between items-start rounded-md">
-            <p className="flex gap-2 text-sm md:text-base">
-              <Icon icon="line-md:check-all" width="20" height="20" className="md:w-6 md:h-6" inline />
-              Develop highly interactive Front end / User Interfaces for the web
-            </p>
-            <p className="flex gap-2 text-sm md:text-base">
-              <Icon icon="line-md:check-all" width="20" height="20" className="md:w-6 md:h-6" inline />
-              Progressive Web Applications ( PWA ) in normal and SPA Stacks
-            </p>
-            <p className="flex gap-2 text-sm md:text-base">
-              <Icon icon="line-md:check-all" width="20" height="20" className="md:w-6 md:h-6" inline />
-              Integration of third party services such as AWS / Digital Ocean
-            </p>
-            <p className="flex gap-2 text-sm md:text-base">
-              <Icon icon="line-md:check-all" width="20" height="20" className="md:w-6 md:h-6" inline />
-              Integration of payment services such as M-Pesa, Monnify,
-              Flutterwave and paypal etc
-            </p>
-          </div>
-
-          <div className="flex flex-col md:flex-row gap-6 items-stretch md:items-start">
+          <div data-reveal className="flex flex-col gap-3 sm:flex-row">
             <button
-              className="dark:bg-white bg-black text-white py-4 px-8 font-medium dark:text-black flex justify-center gap-4 text-base md:text-lg leading-6 rounded-lg hover:scale-105 transition-transform"
+              className="btn-jump flex items-center justify-center gap-3 rounded-full bg-black px-6 py-3 text-sm font-medium text-white shadow-lg dark:bg-white dark:text-black"
               onClick={() => scrollToSection("experience")}
             >
-              View My Experience{" "}
-              <img src={NorthEast} alt="" className="w-5 h-5 md:w-auto md:h-auto" />
+              View My Experience
+              <img src={NorthEast} alt="" className="h-4 w-4" />
             </button>
             <button
-              className="border-2 border-black dark:border-white py-4 px-8 font-medium flex justify-center gap-4 text-base md:text-lg leading-6 rounded-lg hover:scale-105 transition-transform"
+              className="rounded-full border-2 border-black px-6 py-3 text-sm font-medium transition-transform hover:scale-105 dark:border-white"
               onClick={() => scrollToSection("contacts")}
             >
               Let's Talk

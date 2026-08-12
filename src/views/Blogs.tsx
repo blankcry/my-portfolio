@@ -2,7 +2,7 @@ function Blogs() {
   return (
     <section
       id="blogs"
-      className="w-full min-h-[100dvh] flex flex-col gap-4 px-4 md:px-14 py-8"
+      className="w-full section-vh flex flex-col gap-4 px-4 md:px-14 py-8 overflow-hidden"
     >
       <div
         id="Heading"

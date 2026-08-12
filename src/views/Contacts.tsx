@@ -1,56 +1,87 @@
 import { useRef } from "react";
 import { Icon } from "@iconify/react";
-import { Button } from "@/components/ui/button";
+import HeroImage from "@/assets/heroImage.webp";
 import { useReveal } from "@/hooks/useReveal";
 import { useSmoothScroll } from "@/components/scroll/SmoothScrollProvider";
 
+const SOCIALS = [
+  { label: "Facebook", icon: "ic:round-facebook", href: "https://facebook.com/james-yunana" },
+  { label: "X", icon: "ri:twitter-x-line", href: "https://x.com/james_yuna" },
+  { label: "Instagram", icon: "ph:instagram-logo-thin", href: "https://instagram.com/james_yuna" },
+  { label: "WhatsApp", icon: "mdi:whatsapp", href: "https://wa.me/2347041018558" },
+];
+
+/**
+ * Redesigned to match the reference reel: availability pill, oversized
+ * question headline, two-line copy, a single dark CTA, and a row of pill
+ * links with an identity chip leading. See Contacts.legacy.tsx for the
+ * previous version.
+ */
 function Contacts() {
   const rootRef = useRef<HTMLElement>(null);
   const { motionEnabled } = useSmoothScroll();
   useReveal(rootRef, { enabled: motionEnabled });
 
-  const handleEmailClick = () => {
-    window.location.href = "mailto:gajejames@outlook.com";
-  };
-
-  const handleWhatsAppClick = () => {
-    window.open("https://wa.me/2347041018558", "_blank");
-  };
-
   return (
-    <section id="contacts" ref={rootRef} className="w-full min-h-[100dvh] bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center items-center gap-8 px-4 md:px-24">
-      <div className="flex flex-col items-center gap-8 w-full">
-        <div data-reveal className="w-32 h-32 flex items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/5 backdrop-blur-sm border border-primary/20 shadow-lg hover:scale-105 transition-transform duration-300">
-          <Icon icon="mdi:handshake" width="64" height="64" className="text-primary" />
-        </div>
-        
-        <div className="flex flex-col gap-4 w-full text-center">
-          <span data-reveal className="capitalize italic text-lg font-semibold">
-            Let's work together
-          </span>
-          <span data-reveal className="uppercase font-bold text-4xl md:text-5xl">
-            Tell me about your next project
-          </span>
-        </div>
+    <section
+      id="contacts"
+      ref={rootRef}
+      className="flex section-vh w-full flex-col items-center justify-center gap-6 overflow-hidden px-4 md:px-16"
+    >
+      <span
+        data-reveal
+        className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm shadow-sm dark:border-white/15 dark:bg-neutral-900"
+      >
+        <span className="h-2 w-2 rounded-full bg-green-500" />
+        Available for New Project
+      </span>
 
-        <div data-reveal className="flex flex-col md:flex-row gap-4 w-full max-w-md">
-          <Button 
-            onClick={handleEmailClick}
-            className="flex-1 h-12 text-lg"
+      <h2
+        data-reveal
+        className="text-center text-3xl font-extrabold uppercase leading-tight md:text-6xl"
+      >
+        Have a project in mind?
+      </h2>
+
+      <p
+        data-reveal
+        className="max-w-2xl text-center text-base text-gray-600 dark:text-gray-400 md:text-lg"
+      >
+        Together, we can create something clear and impactful. Let's collaborate to bring
+        our ideas to life in a way that resonates with everyone.
+      </p>
+
+      <a
+        data-reveal
+        href="mailto:gajejames@outlook.com"
+        className="btn-jump inline-flex items-center gap-2 rounded-full bg-black px-7 py-3.5 text-sm font-medium text-white shadow-lg dark:bg-white dark:text-black md:text-base"
+      >
+        Contact Me
+        <Icon icon="carbon:arrow-up-right" width={18} height={18} />
+      </a>
+
+      <div data-reveal className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <span className="inline-flex items-center gap-2 rounded-full bg-black py-1.5 pl-1.5 pr-4 text-sm font-medium text-white dark:bg-white dark:text-black">
+          <img
+            src={HeroImage}
+            alt=""
+            className="h-7 w-7 rounded-full object-cover object-top"
+          />
+          James Yunana
+        </span>
+
+        {SOCIALS.map((social) => (
+          <a
+            key={social.label}
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm shadow-sm transition-transform hover:scale-105 dark:border-white/15 dark:bg-neutral-900"
           >
-            <Icon icon="mdi:email" className="mr-2" />
-            Email Me
-          </Button>
-          
-          <Button 
-            onClick={handleWhatsAppClick}
-            variant="outline"
-            className="flex-1 h-12 text-lg"
-          >
-            <Icon icon="mdi:whatsapp" className="mr-2" />
-            WhatsApp
-          </Button>
-        </div>
+            <Icon icon={social.icon} width={16} height={16} />
+            {social.label}
+          </a>
+        ))}
       </div>
     </section>
   );

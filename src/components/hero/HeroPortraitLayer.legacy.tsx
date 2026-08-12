@@ -1,3 +1,6 @@
+// LEGACY — retired along with the falling-portrait scrub between Home and
+// About (Home no longer exposes [data-hero-slot="home"] / [data-hero-proxy]).
+// Not imported anywhere. Kept for reference / easy revert.
 import { useRef } from "react";
 import HeroImage from "@/assets/heroImage.webp";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";

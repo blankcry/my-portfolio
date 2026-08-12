@@ -9,18 +9,22 @@ import { SECTION_IDS, type SectionId } from "@/lib/sections";
  * height-agnostic: exactly one section is active at any scroll position, and it
  * re-measures itself on every `ScrollTrigger.refresh()`.
  */
-export function useActiveSection(onChange: (id: SectionId) => void) {
-  useGSAP(() => {
-    SECTION_IDS.forEach((id) => {
-      if (!document.getElementById(id)) return;
-      ScrollTrigger.create({
-        trigger: `#${id}`,
-        start: "top 45%",
-        end: "bottom 45%",
-        onToggle: (self) => {
-          if (self.isActive) onChange(id);
-        },
+export function useActiveSection(onChange: (id: SectionId) => void, enabled = true) {
+  useGSAP(
+    () => {
+      if (!enabled) return;
+      SECTION_IDS.forEach((id) => {
+        if (!document.getElementById(id)) return;
+        ScrollTrigger.create({
+          trigger: `#${id}`,
+          start: "top 45%",
+          end: "bottom 45%",
+          onToggle: (self) => {
+            if (self.isActive) onChange(id);
+          },
+        });
       });
-    });
-  }, []);
+    },
+    { dependencies: [enabled] }
+  );
 }

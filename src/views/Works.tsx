@@ -1,106 +1,163 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { Icon } from "@iconify/react";
 import { useProjects } from "@/hooks/useProjects";
-import { useReveal } from "@/hooks/useReveal";
-import { Skeleton } from "@/components/ui/skeleton";
-import ProjectCard from "@/components/ProjectCard";
-import { ProjectRing } from "@/components/works/ProjectRing";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { useSmoothScroll } from "@/components/scroll/SmoothScrollProvider";
+import { WorkCard } from "@/components/works/WorkCard";
+import { ProjectCardSkeleton } from "@/components/ProjectCardSkeleton";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { categoryOf } from "@/lib/projects";
+import { PROJECT_CATEGORIES } from "@/types";
+import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
-/** The ring stops reading as a ring past a dozen nodes. */
-const MAX_ON_RING = 12;
+const TABS = ["All", ...PROJECT_CATEGORIES] as const;
+/** The section is one viewport tall: a 2x2 grid fits on desktop, 2 stacked on mobile. */
+const VISIBLE_DESKTOP = 4;
+const VISIBLE_MOBILE = 2;
 
+/**
+ * "Selected Work" — redesigned to match the reference reel: PORTFOLIO
+ * watermark, centred header, filter tabs and View All Work on one line, then a
+ * 2x2 grid. Everything fades in as a staggered sequence when the section snaps
+ * into view. See Works.legacy.tsx for the previous circular-ring version.
+ */
 function Works() {
   const { projects, loading, error } = useProjects();
   const { requestRefresh, motionEnabled } = useSmoothScroll();
   const isMobile = useIsMobile();
   const rootRef = useRef<HTMLElement>(null);
-  useReveal(rootRef, { enabled: motionEnabled });
+
+  const [tab, setTab] = useState<(typeof TABS)[number]>("All");
+
+  const filtered = useMemo(
+    () => (tab === "All" ? projects : projects.filter((p) => categoryOf(p) === tab)),
+    [projects, tab]
+  );
+  const shown = filtered.slice(0, isMobile ? VISIBLE_MOBILE : VISIBLE_DESKTOP);
 
   useEffect(() => {
     if (!loading) requestRefresh();
   }, [loading, projects.length, requestRefresh]);
 
-  const onRing = projects.slice(0, MAX_ON_RING);
+  // Entrance sequence, in the reference's order: header, then the filter/CTA
+  // row, then the cards. Fires when the section snaps into view.
+  useGSAP(
+    () => {
+      if (!motionEnabled || loading) return;
+      const targets = gsap.utils.toArray<HTMLElement>("[data-work-seq]", rootRef.current);
+      const cards = gsap.utils.toArray<HTMLElement>("[data-work-card]", rootRef.current);
+      if (!targets.length && !cards.length) return;
 
-  // One tree, not `hidden md:block` on both — that would mount every dialog twice.
-  const useRing = !isMobile && motionEnabled && onRing.length >= 3;
+      const all = [...targets, ...cards];
+      const show = () => gsap.set(all, { clearProps: "all" });
+
+      // Already past it (e.g. deep link): show immediately rather than
+      // animating offscreen. The trigger is still registered, so coming back
+      // to the section replays the sequence.
+      const startedPast = (rootRef.current?.getBoundingClientRect().top ?? 0) < -10;
+      gsap.set(all, startedPast ? { clearProps: "all" } : { y: 24, autoAlpha: 0 });
+
+      let tl: gsap.core.Timeline | null = null;
+
+      const play = () => {
+        // One clean run per entry — don't restart a sequence already playing.
+        if (tl?.isActive()) return;
+        gsap.set(all, { y: 24, autoAlpha: 0 });
+        tl = gsap
+          .timeline({ defaults: { ease: "power3.out" }, onComplete: show })
+          .to(targets, { y: 0, autoAlpha: 1, duration: 0.55, stagger: 0.12 })
+          .to(cards, { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.09 }, "-=0.2");
+      };
+
+      ScrollTrigger.create({
+        trigger: rootRef.current,
+        start: "top 70%",
+        end: "bottom 30%",
+        onEnter: play,
+        onEnterBack: play,
+      });
+    },
+    // revertOnUpdate: without it useGSAP defers cleanup to unmount, so every
+    // filter change would stack another ScrollTrigger on top of the last.
+    { scope: rootRef, dependencies: [motionEnabled, loading, tab], revertOnUpdate: true }
+  );
 
   return (
     <section
       id="works"
       ref={rootRef}
-      className="w-full flex flex-col gap-8 p-4 md:px-24 py-12 gradient md:rounded-t-[7rem] rounded-xl"
+      className="relative flex section-vh w-full flex-col overflow-hidden px-4 py-8 md:px-12"
     >
-      <div className="flex flex-col gap-4 w-full text-center justify-center text-white">
-        <span data-reveal className="capitalize font-bold text-[30px] md:text-[40px]">
-          Explore my <span className="gradient-text">Projects.</span>
-        </span>
-        <p data-reveal className="max-w-2xl mx-auto text-white/80">
-          A collection of my recent work and personal projects. Each project
-          represents a unique challenge and solution.
-        </p>
-      </div>
+      <span
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-[8%] -translate-x-1/2 select-none whitespace-nowrap text-[16vw] font-extrabold uppercase leading-none tracking-tight text-black/[0.04] dark:text-white/[0.05]"
+      >
+        Portfolio
+      </span>
 
-      {loading && (
-        // Skeleton nodes on the ring's footprint, so the section doesn't resize
-        // when the real data lands.
-        <div className="relative mx-auto aspect-square w-full max-w-[820px]">
-          {Array.from({ length: 6 }).map((_, i) => {
-            const a = (i / 6) * Math.PI * 2;
-            return (
-              <Skeleton
-                key={i}
-                className="absolute left-1/2 top-1/2 h-[140px] w-[140px] rounded-2xl"
-                style={{
-                  transform: `translate(calc(-50% + ${Math.sin(a) * 38}%), calc(-50% + ${
-                    -Math.cos(a) * 21
-                  }%))`,
-                }}
-              />
-            );
-          })}
+      <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col gap-4">
+        <h2
+          data-work-seq
+          className="text-center text-3xl font-extrabold uppercase md:text-5xl"
+        >
+          /Selected Work
+        </h2>
+
+        <div
+          data-work-seq
+          className="flex flex-wrap items-center justify-between gap-3"
+        >
+          <div className="flex flex-wrap items-center gap-1">
+            {TABS.map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                aria-pressed={tab === t}
+                className={
+                  "rounded-full px-3 py-1.5 text-sm transition-colors " +
+                  (tab === t
+                    ? "font-semibold text-black dark:text-white"
+                    : "text-gray-500 hover:text-black dark:hover:text-white")
+                }
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+
+          <Link
+            to="/work"
+            className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-medium shadow-sm transition-transform hover:scale-105 dark:border-white/15 dark:bg-neutral-900"
+          >
+            View All Work
+            <Icon icon="carbon:arrow-up-right" width={16} height={16} />
+          </Link>
         </div>
-      )}
 
-      {error && <p className="text-center text-white">Error fetching projects: {error}</p>}
+        {error && <p className="py-8 text-center">Error fetching projects: {error}</p>}
 
-      {!loading && !error && projects.length === 0 && (
-        <p className="py-24 text-center text-2xl font-semibold text-white/80">
-          Projects coming soon.
-        </p>
-      )}
+        {loading && (
+          <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 sm:grid-cols-2 sm:grid-rows-2">
+            {Array.from({ length: isMobile ? VISIBLE_MOBILE : VISIBLE_DESKTOP }).map((_, i) => (
+              <ProjectCardSkeleton key={i} />
+            ))}
+          </div>
+        )}
 
-      {!loading && !error && projects.length > 0 && (
-        <>
-          {useRing && <ProjectRing projects={onRing} motionEnabled={motionEnabled} />}
+        {!loading && !error && shown.length > 0 && (
+          <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 sm:grid-cols-2 sm:grid-rows-2">
+            {shown.map((project) => (
+              <WorkCard key={project.id} project={project} reveal dense />
+            ))}
+          </div>
+        )}
 
-          {!useRing && isMobile && (
-            // Touch has no hover, so the ring's whole interaction is unavailable.
-            // A snap rail is the honest mobile equivalent. Horizontal CSS snap is
-            // safe here: Lenis only owns vertical window scroll.
-            <div
-              data-lenis-prevent
-              className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            >
-              {projects.map((project) => (
-                <div key={project.id} className="w-[82vw] shrink-0 snap-center">
-                  <ProjectCard project={project} />
-                </div>
-              ))}
-            </div>
-          )}
-
-          {!useRing && !isMobile && (
-            // Too few projects for a ring, or reduced motion: plain grid.
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </div>
-          )}
-        </>
-      )}
+        {!loading && !error && shown.length === 0 && (
+          <p className="py-12 text-center text-gray-500">
+            No projects in this category yet.
+          </p>
+        )}
+      </div>
     </section>
   );
 }

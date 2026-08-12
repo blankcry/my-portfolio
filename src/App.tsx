@@ -1,34 +1,30 @@
+import { Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScrollProvider } from "@/components/scroll/SmoothScrollProvider";
 import Preloader from "@/components/preloader/Preloader";
-import HeroPortraitLayer from "@/components/hero/HeroPortraitLayer";
 import Navbar from "@/components/Navbar";
-import Home from "@/views/Home";
-import About from "@/views/About";
-import Experience from "@/views/Experience";
-import Services from "@/views/Services";
-import Works from "@/views/Works";
-import Contacts from "@/views/Contacts";
-import Blogs from "@/views/Blogs";
+import HomePage from "@/pages/HomePage";
+import WorkPage from "@/pages/WorkPage";
+import ProjectPage from "@/pages/ProjectPage";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <SmoothScrollProvider>
         <Preloader />
-        <div className="min-h-[100dvh] bg-background text-foreground">
+        {/* app-canvas paints the one background for the whole site; every
+            section below is transparent. */}
+        <div className="app-canvas min-h-[100dvh] text-foreground">
           <Navbar />
-          {/* Scrolling happens on the window, not here — `relative` makes this
-              the coordinate space for the document-spanning hero layer. */}
-          <main className="relative md:ml-56 bg-white text-black dark:bg-black dark:text-white">
-            <HeroPortraitLayer />
-            <Home />
-            <About />
-            <Experience />
-            <Services />
-            <Works />
-            <Contacts />
-            <Blogs />
+          {/* z-10 keeps content above the canvas's fixed tint layer. */}
+          <main className="relative z-10 min-h-[100dvh] md:ml-56">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/work" element={<WorkPage />} />
+              <Route path="/work/:slug" element={<ProjectPage />} />
+              {/* Unknown paths fall back to the one-pager rather than a dead end. */}
+              <Route path="*" element={<HomePage />} />
+            </Routes>
           </main>
         </div>
       </SmoothScrollProvider>

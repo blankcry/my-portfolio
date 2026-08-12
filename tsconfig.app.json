@@ -28,5 +28,12 @@
     "noFallthroughCasesInSwitch": true,
     "types": ["vite/client"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  /*
+   * *.legacy.tsx are frozen snapshots of superseded designs, kept for
+   * reference and easy revert. They are imported by nothing. Excluding them
+   * from the type build means a stale reference inside one can never break a
+   * production build as the live code moves on around it.
+   */
+  "exclude": ["src/**/*.legacy.tsx"]
 }

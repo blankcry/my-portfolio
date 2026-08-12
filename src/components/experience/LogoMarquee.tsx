@@ -134,8 +134,8 @@ export function LogoMarquee({ items, motionEnabled, onSelect }: LogoMarqueeProps
   );
 
   return (
-    <div className="-mx-4 mt-4 border-t border-white/15 px-4 py-8 md:-mx-24 md:px-24">
-      <p className="mb-6 text-xs uppercase tracking-[0.3em] text-white/60">
+    <div className="-mx-4 border-t border-black/10 px-4 py-4 dark:border-white/15 md:-mx-16 md:px-16">
+      <p className="mb-3 text-xs uppercase tracking-[0.3em] text-muted-foreground">
         Companies I've built for
       </p>
 
