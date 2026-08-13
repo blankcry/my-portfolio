@@ -19,7 +19,7 @@ export const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/** Height of the mobile sticky header. Must stay in sync with Navbar's `h-16`. */
-export const MOBILE_HEADER_H = 64;
+/** Height of the fixed header. Must stay in sync with Header's `h-16`. */
+export const HEADER_H = 64;
 
 export { gsap, ScrollTrigger, useGSAP };

@@ -11,14 +11,13 @@ import {
 import { useLocation } from "react-router-dom";
 import Lenis from "lenis";
 import {
-  MOBILE_HEADER_H,
+  HEADER_H,
   gsap,
   prefersReducedMotion,
   ScrollTrigger,
   useGSAP,
 } from "@/lib/gsap";
 import { SCROLL_EASE, type SectionId } from "@/lib/sections";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { useSectionSnap } from "@/hooks/useSectionSnap";
 import { useActiveSection } from "@/hooks/useActiveSection";
 
@@ -48,7 +47,6 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
   const isSnappingRef = useRef(false);
   const refreshTimer = useRef<number | undefined>(undefined);
-  const isMobile = useIsMobile();
   const { pathname } = useLocation();
 
   const [motionEnabled] = useState(() => !prefersReducedMotion());
@@ -136,7 +134,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   useSectionSnap(lenisRef, {
     enabled: snapEnabled,
     isSnappingRef,
-    offset: isMobile ? MOBILE_HEADER_H : 0,
+    offset: HEADER_H,
   });
 
   useActiveSection(setActiveSection, isHome);
@@ -166,7 +164,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       if (!el) return;
 
       setActiveSection(id); // optimistic highlight
-      const offset = isMobile ? -MOBILE_HEADER_H : 0;
+      const offset = -HEADER_H;
       const lenis = lenisRef.current;
 
       if (!lenis) {
@@ -187,7 +185,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
         },
       });
     },
-    [isMobile]
+    []
   );
 
   const value = useMemo(

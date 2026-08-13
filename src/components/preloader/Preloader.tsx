@@ -22,8 +22,11 @@ function shouldPlayIntro() {
   }
 }
 
+/** How long the logo pulses before the overlay wipes away. */
+const HOLD_S = 1.4;
+
 /**
- * Counter + wipe only — no portrait handoff. The falling-portrait scrub this
+ * Pulsing logo + wipe — no portrait handoff. The falling-portrait scrub this
  * used to hand off into was retired (Home no longer scrubs its portrait into
  * About); Home now runs its own on-mount entrance timeline once `introDone`
  * flips, gated the same way this component already gates itself.
@@ -34,8 +37,7 @@ export function Preloader() {
   const [finished, setFinished] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
-  const counterRef = useRef<HTMLSpanElement>(null);
-  const barRef = useRef<HTMLSpanElement>(null);
+  const logoRef = useRef<HTMLImageElement>(null);
 
   useGSAP(
     () => {
@@ -55,10 +57,20 @@ export function Preloader() {
       window.scrollTo(0, 0);
       lockScroll(true);
 
-      const counter = { v: 0 };
+      // Breathes for the duration of the hold, independent of the wipe timeline.
+      const pulse = gsap.to(logoRef.current, {
+        scale: 1.12,
+        duration: 0.55,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+      });
+
       const tl = gsap.timeline({
         defaults: { ease: "power2.out" },
+        delay: HOLD_S,
         onComplete: () => {
+          pulse.kill();
           lockScroll(false);
           setIntroDone(true);
           setFinished(true);
@@ -66,30 +78,15 @@ export function Preloader() {
         },
       });
 
-      tl.to(
-        counter,
-        {
-          v: 100,
-          duration: 1.4,
-          ease: "power2.inOut",
-          snap: { v: 1 },
-          onUpdate: () => {
-            if (counterRef.current)
-              counterRef.current.textContent = String(Math.round(counter.v)).padStart(3, "0");
-            if (barRef.current) gsap.set(barRef.current, { scaleX: counter.v / 100 });
-          },
-        },
-        0
-      );
-
       // Wipe the overlay away; Home's own entrance timeline takes it from here.
-      tl.to(
-        rootRef.current,
-        { clipPath: "inset(0 0 100% 0)", duration: 0.8, ease: "power4.inOut" },
-        ">-0.1"
-      );
+      tl.to(rootRef.current, {
+        clipPath: "inset(0 0 100% 0)",
+        duration: 0.8,
+        ease: "power4.inOut",
+      });
 
       return () => {
+        pulse.kill();
         lockScroll(false);
       };
     },
@@ -104,22 +101,7 @@ export function Preloader() {
       className="fixed inset-0 z-[100] bg-background grid place-items-center"
       style={{ clipPath: "inset(0 0 0% 0)" }}
     >
-      <div className="flex flex-col items-center gap-6">
-        <img src={Logo} alt="Blankcry" className="h-[64px]" />
-        <span
-          ref={counterRef}
-          className="font-montserrat text-5xl md:text-7xl font-bold tabular-nums text-foreground"
-        >
-          000
-        </span>
-        <span className="block h-px w-40 md:w-64 bg-foreground/20 overflow-hidden">
-          <span
-            ref={barRef}
-            className="block h-full w-full origin-left gradient"
-            style={{ transform: "scaleX(0)" }}
-          />
-        </span>
-      </div>
+      <img ref={logoRef} src={Logo} alt="Blankcry" className="h-[64px] md:h-[80px]" />
     </div>
   );
 }

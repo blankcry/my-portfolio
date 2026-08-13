@@ -108,20 +108,13 @@
 
   :root {
     /*
-     * Height of the sticky mobile header. It sits in normal flow above <main>
-     * and stays pinned, so it permanently covers the top of whatever section
-     * is snapped into view. Sections subtract it (see .section-vh) or they
+     * Height of the fixed header. It's pinned above everything at every
+     * breakpoint now, so it permanently covers the top of whatever section is
+     * snapped into view. Sections subtract it (see .section-vh) or they
      * overflow the viewport by exactly this much. Must stay in sync with
-     * MOBILE_HEADER_H in src/lib/gsap.ts, which offsets every snap target.
+     * HEADER_H in src/lib/gsap.ts, which offsets every snap target.
      */
     --nav-h: 4rem;
-  }
-
-  @media (min-width: 768px) {
-    :root {
-      /* Desktop nav is a fixed side rail — it takes no vertical space. */
-      --nav-h: 0px;
-    }
   }
 }
 
