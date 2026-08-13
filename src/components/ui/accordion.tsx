@@ -32,7 +32,11 @@ const AccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <ChevronDown className="h-4 w-4 shrink-0 text-white transition-transform duration-200" />
+      {/* No explicit color: lucide icons stroke with currentColor, so this
+          just inherits whatever text color the trigger already has —
+          theme-aware for free, instead of a hardcoded white that goes
+          invisible on a light background. */}
+      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))

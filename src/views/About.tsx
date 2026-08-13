@@ -7,7 +7,6 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useSmoothScroll } from "@/components/scroll/SmoothScrollProvider";
 import { useReveal } from "@/hooks/useReveal";
-import { gsap, useGSAP } from "@/lib/gsap";
 
 dayjs.extend(relativeTime);
 
@@ -15,36 +14,16 @@ dayjs.extend(relativeTime);
  * Trimmed to fit exactly one viewport, since sections now snap hard and must
  * not overflow. The four-bullet capability card that used to sit at the bottom
  * was dropped — it restated what the Services section already covers.
+ *
+ * The portrait here is its own plain, static image — independent of the hero
+ * portrait in Home, which turns into the persistent nav button and doesn't
+ * travel on to this section.
  */
 function About() {
   const rootRef = useRef<HTMLElement>(null);
-  const slotRef = useRef<HTMLDivElement>(null);
-  const { scrollToSection, motionEnabled, heroPortraitArrived } = useSmoothScroll();
+  const { scrollToSection, motionEnabled } = useSmoothScroll();
   const experienceInYears = dayjs("2020-01-01").toNow(true).split(" ")[0];
   useReveal(rootRef, { enabled: motionEnabled });
-
-  // Open (or re-collapse) the portrait slot. Animating height rather than
-  // toggling it is the point: the surrounding text visibly slides down to make
-  // room, which is what sells the portrait as having travelled here.
-  useGSAP(
-    () => {
-      const slot = slotRef.current;
-      if (!slot) return;
-
-      if (!heroPortraitArrived) {
-        gsap.set(slot, { height: 0, opacity: 0 });
-        return;
-      }
-
-      gsap.to(slot, {
-        height: "auto",
-        opacity: 1,
-        duration: motionEnabled ? 0.5 : 0,
-        ease: "power3.out",
-      });
-    },
-    { dependencies: [heroPortraitArrived, motionEnabled], scope: rootRef }
-  );
 
   return (
     <section
@@ -53,7 +32,7 @@ function About() {
       className="flex section-vh w-full flex-col justify-center gap-4 overflow-hidden px-4 py-6 md:gap-6 md:px-16 md:py-10"
     >
       <div data-reveal className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-[0.3em] text-gray-500">
+        <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
           /About
         </span>
         <span className="text-2xl font-bold uppercase md:text-4xl">
@@ -63,46 +42,22 @@ function About() {
 
       <div className="flex min-h-0 flex-col items-center gap-4 md:flex-row md:gap-12">
         {/* ---- Identity ---- */}
-        {/*
-         * Deliberately NOT data-reveal: this column holds [data-about-avatar],
-         * which HeroPortraitMorph flies the hero portrait into. A merge target
-         * that is itself being animated is a moving target — the flight would
-         * measure a position the avatar is about to leave and land offset by
-         * the reveal's travel. The pieces inside reveal individually instead,
-         * so the avatar's box stays put.
-         */}
-        <div className="flex w-full min-w-0 shrink-0 flex-col items-center gap-2 text-center font-ibm md:gap-3 md:w-auto">
-          {/*
-           * About owns no picture of its own. The slot stays collapsed to zero
-           * height — contributing nothing to layout, so the text below sits at
-           * the top of the column — until the hero portrait flies in, at which
-           * point it opens and pushes the text down into its final position.
-           */}
-          <div ref={slotRef} className="overflow-hidden" style={{ height: 0, opacity: 0 }}>
-            <div className="rounded-full p-1 gradient">
-              {/* Merge target for the hero portrait's flight (HeroPortraitMorph). */}
-              <div
-                data-about-avatar
-                className="aspect-square w-[min(112px,15vh)] overflow-hidden rounded-full md:w-[min(260px,32vh)]"
-              >
-                {heroPortraitArrived && (
-                  <img
-                    src={HeroImage}
-                    className="h-full w-full object-cover"
-                    alt="James Yunana - Full Stack Developer"
-                  />
-                )}
-              </div>
+        <div
+          data-reveal
+          className="flex w-full min-w-0 shrink-0 flex-col items-center gap-2 text-center font-ibm md:gap-3 md:w-auto"
+        >
+          <div className="rounded-full p-1 gradient">
+            <div className="aspect-square w-[min(112px,15vh)] overflow-hidden rounded-full md:w-[min(200px,26vh)]">
+              <img
+                src={HeroImage}
+                className="h-full w-full object-cover"
+                alt="James Yunana - Full Stack Developer"
+              />
             </div>
           </div>
 
-          <p data-reveal className="gradient-text text-3xl font-bold uppercase md:text-4xl">
-            blankcry
-          </p>
-          <p
-            data-reveal
-            className="flex flex-wrap items-center justify-center gap-x-2 text-sm md:text-base"
-          >
+          <p className="gradient-text text-3xl font-bold uppercase md:text-4xl">blankcry</p>
+          <p className="flex flex-wrap items-center justify-center gap-x-2 text-sm md:text-base">
             <span className="font-extrabold italic">Full Stack Developer</span>
             <span>based in</span>
             <Icon
@@ -113,7 +68,7 @@ function About() {
             />
           </p>
 
-          <div data-reveal className="flex gap-3">
+          <div className="flex gap-3">
             {[
               { icon: "ic:round-facebook", href: "https://facebook.com/james-yunana", label: "Facebook" },
               { icon: "ri:twitter-x-line", href: "https://x.com/james_yuna", label: "X" },
@@ -131,7 +86,6 @@ function About() {
           </div>
 
           <a
-            data-reveal
             href="https://docs.google.com/document/d/1P81SG_ILDA_xWMfAKbVF41KLqrmsuWcGYFdIqX0obsk/edit?usp=sharing"
             className="flex items-center gap-2 text-sm"
           >

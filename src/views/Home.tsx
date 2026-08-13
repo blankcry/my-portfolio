@@ -39,8 +39,7 @@ function Home() {
             clearProps: "transform",
           },
           0.35
-        )
-        .from("[data-hero-cue]", { autoAlpha: 0, duration: 0.5 }, "-=0.2");
+        );
     },
     { scope: rootRef, dependencies: [motionEnabled, introDone] }
   );
@@ -111,23 +110,6 @@ function Home() {
           <Icon icon="carbon:arrow-up-right" width="18" height="18" />
         </button>
       </div>
-
-      <button
-        data-hero-cue
-        aria-label="Scroll to about"
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
-        onClick={() => scrollToSection("about")}
-      >
-        <span className="text-xs uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400">
-          Scroll
-        </span>
-        <span className="relative block h-12 w-px overflow-hidden bg-gray-300 dark:bg-gray-700">
-          <span
-            data-hero-cue-line
-            className="absolute inset-x-0 top-0 h-1/2 bg-green-500"
-          />
-        </span>
-      </button>
     </section>
   );
 }

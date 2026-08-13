@@ -116,8 +116,8 @@ function Works() {
                 className={
                   "rounded-full px-3 py-1.5 text-sm transition-colors " +
                   (tab === t
-                    ? "font-semibold text-black dark:text-white"
-                    : "text-gray-500 hover:text-black dark:hover:text-white")
+                    ? "font-semibold text-foreground"
+                    : "text-muted-foreground hover:text-foreground")
                 }
               >
                 {t}

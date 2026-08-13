@@ -29,13 +29,6 @@ interface SmoothScrollValue {
   motionEnabled: boolean;
   introDone: boolean;
   setIntroDone: (v: boolean) => void;
-  /**
-   * True once the hero portrait has begun its flight into About. About has no
-   * picture of its own until this flips — it opens a slot for the incoming
-   * portrait, which shifts the surrounding text down to make room.
-   */
-  heroPortraitArrived: boolean;
-  setHeroPortraitArrived: (v: boolean) => void;
   lockScroll: (locked: boolean) => void;
   /** Debounced, paint-deferred, snap-aware `ScrollTrigger.refresh()`. */
   requestRefresh: () => void;
@@ -61,7 +54,6 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const [motionEnabled] = useState(() => !prefersReducedMotion());
   const [activeSection, setActiveSection] = useState<SectionId | "">("");
   const [introDone, setIntroDone] = useState(false);
-  const [heroPortraitArrived, setHeroPortraitArrived] = useState(false);
 
   // Section snapping only makes sense on the one-pager. /work and /work/:slug
   // are ordinary documents that should scroll normally.
@@ -205,8 +197,6 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       motionEnabled,
       introDone,
       setIntroDone,
-      heroPortraitArrived,
-      setHeroPortraitArrived,
       lockScroll,
       requestRefresh,
       snapEnabled,
@@ -216,7 +206,6 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       scrollToSection,
       motionEnabled,
       introDone,
-      heroPortraitArrived,
       lockScroll,
       requestRefresh,
       snapEnabled,

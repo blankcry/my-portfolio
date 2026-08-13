@@ -36,6 +36,49 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+  			/*
+  			 * These map 1:1 to the CSS custom properties in src/index.css
+  			 * (:root and .dark). Without this block, `text-foreground`,
+  			 * `bg-card`, `bg-muted`, `text-muted-foreground` etc. are not
+  			 * recognized Tailwind colors — Tailwind silently emits no CSS for
+  			 * them rather than erroring, so the class does nothing and text
+  			 * falls back to the browser default (black) in both themes. That
+  			 * was the actual cause of dark-mode text staying black: every
+  			 * semantic-token class used this session compiled to nothing.
+  			 */
+  			border: 'hsl(var(--border))',
+  			input: 'hsl(var(--input))',
+  			ring: 'hsl(var(--ring))',
+  			background: 'hsl(var(--background))',
+  			foreground: 'hsl(var(--foreground))',
+  			primary: {
+  				DEFAULT: 'hsl(var(--primary))',
+  				foreground: 'hsl(var(--primary-foreground))'
+  			},
+  			secondary: {
+  				DEFAULT: 'hsl(var(--secondary))',
+  				foreground: 'hsl(var(--secondary-foreground))'
+  			},
+  			destructive: {
+  				DEFAULT: 'hsl(var(--destructive))',
+  				foreground: 'hsl(var(--destructive-foreground))'
+  			},
+  			muted: {
+  				DEFAULT: 'hsl(var(--muted))',
+  				foreground: 'hsl(var(--muted-foreground))'
+  			},
+  			accent: {
+  				DEFAULT: 'hsl(var(--accent))',
+  				foreground: 'hsl(var(--accent-foreground))'
+  			},
+  			popover: {
+  				DEFAULT: 'hsl(var(--popover))',
+  				foreground: 'hsl(var(--popover-foreground))'
+  			},
+  			card: {
+  				DEFAULT: 'hsl(var(--card))',
+  				foreground: 'hsl(var(--card-foreground))'
+  			},
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',

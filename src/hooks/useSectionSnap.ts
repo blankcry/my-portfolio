@@ -5,13 +5,6 @@ import { SECTION_IDS, SCROLL_EASE } from "@/lib/sections";
 
 /** One gesture moves exactly one section. */
 const TRANSITION_S = 0.85;
-/**
- * Home <-> About is deliberately slower than every other move. The hero
- * portrait travels between those two sections during the transition, and at
- * the normal speed it reads as a jump-cut rather than a journey. The portrait
- * animation reads this same constant so the two stay locked together.
- */
-export const PORTRAIT_TRANSITION_S = 1.8;
 /** Ignore wheel noise below this — trackpads emit tiny deltas constantly. */
 const DELTA_THRESHOLD = 12;
 /**
@@ -85,14 +78,10 @@ export function useSectionSnap(
       const clamped = Math.min(Math.max(0, target), boundaries.length - 1);
       if (clamped === index && isSnappingRef.current) return;
 
-      // Slow the one transition that carries the portrait between sections.
-      const between = new Set([index, clamped]);
-      const carriesPortrait = between.has(0) && between.has(1);
-
       index = clamped;
       isSnappingRef.current = true;
       lenis.scrollTo(boundaries[clamped], {
-        duration: carriesPortrait ? PORTRAIT_TRANSITION_S : TRANSITION_S,
+        duration: TRANSITION_S,
         easing: SCROLL_EASE,
         // lock: the whole point is that input can't interrupt mid-transition.
         lock: true,
