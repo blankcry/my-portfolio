@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import HeroImage from "@/assets/heroImage.webp";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, MOBILE_BOTTOM_NAV_H, useGSAP } from "@/lib/gsap";
 import { useSmoothScroll } from "@/components/scroll/SmoothScrollProvider";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { SECTION_IDS } from "@/lib/sections";
 
 type Phase = "idle" | "bouncing" | "moving" | "nav";
@@ -28,6 +29,7 @@ const AUTO_START_DELAY_S = 1.3;
  */
 export function HeroPortraitMorph({ className = "" }: { className?: string }) {
   const { scrollToSection, motionEnabled, introDone, activeSection } = useSmoothScroll();
+  const isMobile = useIsMobile();
 
   const btnRef = useRef<HTMLButtonElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -44,15 +46,24 @@ export function HeroPortraitMorph({ className = "" }: { className?: string }) {
   const isLast = currentIndex === SECTION_IDS.length - 1;
   const target = isLast ? SECTION_IDS[currentIndex - 1] : SECTION_IDS[currentIndex + 1];
 
-  const settle = (fixedEl: HTMLElement) => {
-    gsap.set(fixedEl, {
-      left: () => window.innerWidth - BUTTON_SIZE - BUTTON_MARGIN,
-      top: () => window.innerHeight - BUTTON_SIZE - BUTTON_MARGIN,
-      width: BUTTON_SIZE,
-      height: BUTTON_SIZE,
-      borderRadius: 9999,
-    });
-  };
+  // On mobile the floating bottom nav occupies this corner too — clear it.
+  const bottomInset = useCallback(
+    () => BUTTON_MARGIN + (isMobile ? MOBILE_BOTTOM_NAV_H : 0),
+    [isMobile]
+  );
+
+  const settle = useCallback(
+    (fixedEl: HTMLElement) => {
+      gsap.set(fixedEl, {
+        left: () => window.innerWidth - BUTTON_SIZE - BUTTON_MARGIN,
+        top: () => window.innerHeight - BUTTON_SIZE - bottomInset(),
+        width: BUTTON_SIZE,
+        height: BUTTON_SIZE,
+        borderRadius: 9999,
+      });
+    },
+    [bottomInset]
+  );
 
   // Auto-run once: bounce twice, then move-and-become-arrow. Reduced motion
   // skips straight to the resting nav button — no picture phase at all, since
@@ -116,7 +127,7 @@ export function HeroPortraitMorph({ className = "" }: { className?: string }) {
           })
           .to(el, {
             left: () => window.innerWidth - BUTTON_SIZE - BUTTON_MARGIN,
-            top: () => window.innerHeight - BUTTON_SIZE - BUTTON_MARGIN,
+            top: () => window.innerHeight - BUTTON_SIZE - bottomInset(),
             width: BUTTON_SIZE,
             height: BUTTON_SIZE,
             borderRadius: 9999,
@@ -149,7 +160,7 @@ export function HeroPortraitMorph({ className = "" }: { className?: string }) {
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [phase]);
+  }, [phase, settle]);
 
   // Idle invitation once it has settled — a slow bob, so it still reads as an
   // interactive control rather than a static icon parked on screen.

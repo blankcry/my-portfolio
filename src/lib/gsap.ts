@@ -22,4 +22,7 @@ export const prefersReducedMotion = () =>
 /** Height of the fixed header. Must stay in sync with Header's `h-16`. */
 export const HEADER_H = 64;
 
+/** Height of the mobile floating bottom nav. Must stay in sync with --bottom-nav-h in index.css. */
+export const MOBILE_BOTTOM_NAV_H = 112;
+
 export { gsap, ScrollTrigger, useGSAP };

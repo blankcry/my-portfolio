@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScrollProvider } from "@/components/scroll/SmoothScrollProvider";
 import Preloader from "@/components/preloader/Preloader";
 import Header from "@/components/Header";
+import MobileNav from "@/components/MobileNav";
 import HomePage from "@/pages/HomePage";
 import WorkPage from "@/pages/WorkPage";
 import ProjectPage from "@/pages/ProjectPage";
@@ -17,7 +18,7 @@ function App() {
         <div className="app-canvas min-h-[100dvh] text-foreground">
           <Header />
           {/* z-10 keeps content above the canvas's fixed tint layer. */}
-          <main className="relative z-10 min-h-[100dvh]">
+          <main className="relative z-10 min-h-[100dvh] pb-[var(--bottom-nav-h)]">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/work" element={<WorkPage />} />
@@ -26,6 +27,7 @@ function App() {
               <Route path="*" element={<HomePage />} />
             </Routes>
           </main>
+          <MobileNav />
         </div>
       </SmoothScrollProvider>
     </ThemeProvider>

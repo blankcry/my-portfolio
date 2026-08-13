@@ -115,13 +115,22 @@
      * HEADER_H in src/lib/gsap.ts, which offsets every snap target.
      */
     --nav-h: 4rem;
+    /* Height of the mobile floating bottom nav bar (MobileNav). Desktop has
+       no bottom nav, so this stays 0 there. */
+    --bottom-nav-h: 0px;
+  }
+
+  @media (max-width: 767px) {
+    :root {
+      --bottom-nav-h: 7rem;
+    }
   }
 }
 
 @layer utilities {
   /* Exactly one usable viewport for a snapping section. */
   .section-vh {
-    height: calc(100dvh - var(--nav-h));
+    height: calc(100dvh - var(--nav-h) - var(--bottom-nav-h));
   }
 
   /*
