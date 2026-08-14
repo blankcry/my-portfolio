@@ -122,7 +122,7 @@
 
   @media (max-width: 767px) {
     :root {
-      --bottom-nav-h: 7rem;
+      --bottom-nav-h: 5.5rem;
     }
   }
 }

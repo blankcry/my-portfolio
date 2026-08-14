@@ -23,6 +23,6 @@ export const prefersReducedMotion = () =>
 export const HEADER_H = 64;
 
 /** Height of the mobile floating bottom nav. Must stay in sync with --bottom-nav-h in index.css. */
-export const MOBILE_BOTTOM_NAV_H = 112;
+export const MOBILE_BOTTOM_NAV_H = 88;
 
 export { gsap, ScrollTrigger, useGSAP };
