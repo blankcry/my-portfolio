@@ -61,7 +61,7 @@ function About() {
             <span className="font-extrabold italic">Full Stack Developer</span>
             <span>based in</span>
             <Icon
-              icon="arcticons:emoji-flag-united-kingdom"
+              icon="game-icons:nigeria"
               fill="green"
               stroke="green"
               className="h-5 w-5"
@@ -117,7 +117,7 @@ function About() {
             </span>
             <span className="flex items-center gap-3">
               <Icon icon="dashicons:location" width="16" height="16" />
-              Derby, United Kingdom
+              Abuja, Nigeria
             </span>
           </div>
 
