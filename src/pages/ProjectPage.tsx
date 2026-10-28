@@ -157,18 +157,24 @@ export function ProjectPage() {
 
         {/* ---- Gallery ---- */}
         {project.photo_url?.length > 0 && (
-          <div className="flex flex-col gap-6 md:gap-10">
+          <div
+            className={
+              project.photo_url.length === 1
+                ? "mx-auto max-w-2xl"
+                : "grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6"
+            }
+          >
             {project.photo_url.map((photo, i) => (
               <div
                 key={i}
                 data-reveal
-                className="overflow-hidden rounded-2xl border border-black/5 bg-neutral-100 dark:border-white/10 dark:bg-neutral-900"
+                className="aspect-[16/10] max-h-60 overflow-hidden rounded-2xl border border-black/5 bg-neutral-100 dark:border-white/10 dark:bg-neutral-900 md:max-h-72"
               >
                 <img
                   src={photo}
                   alt={`${project.name} — screen ${i + 1}`}
                   loading={i === 0 ? "eager" : "lazy"}
-                  className="w-full object-cover"
+                  className="h-full w-full object-cover object-top"
                 />
               </div>
             ))}

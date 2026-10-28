@@ -34,7 +34,7 @@ export function WorkCard({ project, reveal = false, dense = false }: WorkCardPro
       <div
         className={
           "relative overflow-hidden bg-neutral-100 dark:bg-neutral-800 " +
-          (dense ? "min-h-0 flex-1" : "aspect-[16/10]")
+          (dense ? "min-h-0 max-h-36 flex-1 md:max-h-44" : "h-40 sm:h-44")
         }
       >
         {project.photo_url?.[0] && (

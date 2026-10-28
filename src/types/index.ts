@@ -29,8 +29,8 @@ export interface Experience {
   position: string;
   company: string;
   /**
-   * Square company logo — absolute https URL (Supabase Storage public bucket)
-   * or a `/public` path. SVG or transparent PNG, >= 128x128.
+   * Square company logo — public asset path (e.g. `/company/...`) or absolute URL.
+   * SVG or transparent PNG, >= 128x128.
    * Null renders the gradient monogram fallback in `CompanyLogo`.
    */
   logo_url: string | null;

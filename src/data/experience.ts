@@ -1,152 +1,161 @@
-export default [
+import type { Experience } from "@/types";
+
+export const experience: Experience[] = [
   {
-    date: {
-      start: "2019",
-      end: "2019",
-    },
-    position: "Software Developer Intern",
-    company: "Pyrich Group Limited",
-    desc: "I developed and enhanced a full-stack web application for a government agency to manage visitor information and streamline operations. My role involved building core functionalities, improving existing systems, and troubleshooting bugs to enhance system reliability. This experience strengthened my problem-solving skills, attention to detail, and understanding of quality assurance in real-world software development.",
-    skills:
-      "Node.js · React.js · Web Design · Web Development · Express.js · Back-End Web Development · Databases · Redux.js · Knex.js · Representational State Transfer (REST) · PostgreSQL · Front-End Development · SaaS Development",
-  },
-  {
-    date: {
-      start: "2021",
-      end: "2021",
-    },
-    position: "NYSC Attaché - Support Personnel",
-    company: "Inlaks Nigeria",
-    desc: "At INLAKS Ltd., the sole distributor of Temenos T24 in Sub-Saharan Africa, I provided support for the core banking sector on a project with CBN. I gained hands-on experience with T24, running batch scripts, subroutines, and database queries to improve performance and reduce redundancy. Working extensively with the terminal, I deepened my understanding of core banking concepts and system limitations, enhancing my problem-solving skills and ability to work under pressure. This experience equipped me with the technical expertise to contribute effectively to banking and financial technology solutions.",
-    skills:
-      "cmd · Bash · jBase · SQL · MySQL · window server · Linux · Temenos T24 · Core Banking · Banking · Financial Technology · Batch Processing · Database Management · System Administration",
-  },
-  {
-    date: {
-      start: "2021",
-      end: "2021",
-    },
-    position: "Full-stack Developer - Freelance",
-    company: "Vastovers Stemordz Ltd",
-    desc: [
-      "Developed a complete online store for Vastover Stemordz Ltd, a pharmaceutical company in Abuja, Nigeria.",
-      "Upgraded their outdated system to a modern e-commerce platform.",
-      "Built the entire app from scratch, including the front-end and back-end.",
-      "Made sure the old and new systems could work together smoothly.",
-      "Created user-friendly features and designs to make shopping easier.",
-      "Worked closely with the company to understand their needs and meet their requirements.",
-      "Ensured the website was secure and protected customer information.",
-      "Tested everything thoroughly to fix any problems and make it run smoothly.",
-      "Provided ongoing support and maintenance to keep the website running well.",
-      "Helped Vastover Stemordz Ltd grow their online sales and reach more customers in the pharmaceutical industry.",
+    "id": "c4d92a10-4821-4d9a-b427-02482e9b1101",
+    "start_date": "2026",
+    "end_date": "Present",
+    "position": "Full Stack Engineer",
+    "company": "Magnet",
+    "logo_url": "/company/magnet_logo.png",
+    "desc": [
+      "Spearheaded full stack development and AI agent architecture for Magnetic Performance, an AI-powered growth intelligence and performance analytics platform connecting Meta Ad campaigns, landing pages, and CRM funnels.",
+      "Developed Maggie, an intelligent growth intelligence agent powered by Anthropic Claude delivering automated revenue insights, ad spend optimization, and conversion anomaly detection.",
+      "Architected dynamic data visualizations and visual workflows using React Flow, Vite, and Tailwind CSS for real-time campaign topology mapping.",
+      "Designed synchronized dual-axis time-series charts with live lift projections and automated 7-step conversion funnel leak detection.",
+      "Engineered resilient backend services and analytics ingestion pipelines with Node.js, Express, and MongoDB to track high-volume visitor journeys and attribution metrics.",
+      "Built full-stack TypeScript architectures ensuring end-to-end type safety, rapid feature iteration, and seamless UX across complex analytic dashboards."
     ],
-    skills:
-      "React.js · Web Development · Back-End Web Development · Python (Programming Language) · Representational State Transfer (REST) · Front-End Development · E-commerce · Web Design · Web Application Development · PostgreSQL · Redux.js · Flask · Databases",
-  },
-  {
-    date: {
-      start: "2022",
-      end: "2022",
-    },
-    position: "Full Stack Developer - Contract",
-    company: "Varroe",
-    desc: [
-      "Developed and maintained customer-facing web application interfaces using ReactJS, Next.js, and Tailwind CSS.",
-      "Translated designs into responsive and visually appealing UIs",
-      "Optimized performance (Next.js SSR) for faster load times",
-      "Integrated Node.js APIs for dynamic content.",
-      "Ensured cross-browser compatibility.",
-      "Developed core API for business finder solution.",
-      "Led initial backend development, establishing a scalable system.",
-    ],
-    skills:
-      "TypeScript · React.js · Cascading Style Sheets (CSS) · Web Development · JavaScript · Agile & Waterfall Methodologies · ESLint · Redux.js · Next.js · Front-End Development Node.js · Web Development · Express.js · Agile & Waterfall Methodologies · ESLint · Databases · System Architecture · Representational State Transfer (REST) · Sequelize.js · SQL · Object-Oriented Programming (OOP) · PostgreSQL · Tailwind CSS",
-  },
-  {
-    date: {
-      start: "2023",
-      end: "2023",
-    },
-    position: "Frontend Web Developer - Contract",
-    company: "SimpleMarket Inc. (BetaStore.co)",
-    desc: "",
-    skills:
-      "TypeScript · React.js · chakra-ui · Web Development · JavaScript · Agile & Waterfall Methodologies · ESLint · Redux.js · pnpm · Front-End Development · vite · Web Development · Tailwind CSS · React Hooks · React Context · React Testing Library · Jest · RTK Query",
-  },
-  {
-    date: {
-      start: "2023",
-      end: "2024",
-    },
-    position: "Frontend Developer",
-    company: "Perizer",
-    desc: "",
-    skills:
-      "TypeScript · Node.js · Web Development · Agile & Waterfall Methodologies · Tailwind CSS · ESLint · Agile Methodologies · Next.js · Front-End Development · Ant Design",
-  },
-  {
-    date: {
-      start: "2021",
-      end: "2024",
-    },
-    position: "Full Stack Developer",
-    company: "BuyPower (YC W17)",
-    desc: "",
-    skills: [
+    "skills": [
+      "React",
       "TypeScript",
-
       "Node.js",
-
-      "React.js",
-
-      "Core Banking",
-
-      "mui",
-
-      "Web Development",
-
-      "Express.js",
-
-      "JavaScript",
-
-      "Back-End Web Development",
-
-      "Agile & Waterfall Methodologies",
-
+      "Express",
+      "MongoDB",
+      "Anthropic Claude",
+      "AI Agents",
+      "React Flow",
       "Tailwind CSS",
-      "Bash",
-
-      "ESLint",
-
-      "Payment Services",
-
-      "Redux.js",
-
-      "Microservices",
-      "Data Caching",
-
-      "Amazon Web Services (AWS)",
-
-      "Redis",
-
-      "Representational State Transfer (REST)",
-
-      "Sequelize.js",
-
-      "RabbitMQ",
-
-      "MySQL",
+      "Vite",
+      "REST APIs",
+      "System Architecture"
     ],
+    "order_index": 0,
+    "is_published": true,
+    "created_at": "2026-10-28T05:00:00.000Z"
   },
   {
-    date: {
-      start: "2024",
-      end: "2024",
-    },
-    position: "Senior Backend Developer",
-    company: "Fincra Technologies",
-    desc: "",
-    skills: [
+    "id": "f1b83e20-7214-419b-a318-72410a8b2202",
+    "start_date": "2026",
+    "end_date": "Present",
+    "position": "Full Stack Engineer",
+    "company": "Alleanza Health",
+    "logo_url": "/company/alleanza_logo.png",
+    "desc": [
+      "Designed and developed CURA, a comprehensive HMO operations and health insurance management platform for Alleanza Health Management Limited (NHIA-licensed).",
+      "Architected and developed scalable backend microservices and APIs with NestJS, TypeScript, and Bun, ensuring high throughput and reliable data handling.",
+      "Engineered a responsive, modern web application using Next.js 16 (App Router), Tailwind CSS, and TypeScript for hospital providers, enrollees, and corporate administrators.",
+      "Automated core healthcare operational workflows: policy management, member enrollment, tariff calculations, hospital provider networks, and dispute resolution.",
+      "Implemented strict regulatory compliance workflows and secure clinical data handling in line with NHIA standards.",
+      "Designed relational and cache persistence layers utilizing PostgreSQL, MongoDB, and Redis to optimize query speeds for heavy claims processing and real-time eligibility checks."
+    ],
+    "skills": [
+      "Next.js",
+      "NestJS",
+      "TypeScript",
+      "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "Bun",
+      "Tailwind CSS",
+      "Docker",
+      "REST APIs",
+      "Healthcare Systems",
+      "System Architecture"
+    ],
+    "order_index": 1,
+    "is_published": true,
+    "created_at": "2026-10-28T05:00:00.000Z"
+  },
+  {
+    "id": "0c104494-077f-4aa1-b21d-f5996cb54335",
+    "start_date": "2025",
+    "end_date": "Present",
+    "position": "Senior Full Stack Web Developer ",
+    "company": "EMGE Resources",
+    "desc": [
+      "Designed and developed end-to-end web applications supporting patient management, clinical workflows, and healthcare operations",
+      "Built secure, scalable frontend applications for patients, clinicians, and administrators using modern JavaScript frameworks.",
+      "Developed backend services and APIs for processing and managing sensitive healthcare data with a strong focus on security and reliability.",
+      "Implemented authentication, authorization, and role-based access control in line with healthcare data protection standards.",
+      "Collaborated with product, design, and clinical stakeholders to translate healthcare requirements into technical solutions.",
+      "Designed and maintained relational and NoSQL databases, ensuring data integrity and performance.",
+      "Integrated third-party services and external healthcare systems.",
+      "Contributed to architectural decisions, code reviews, and engineering best practices.",
+      "Supported cloud deployments, CI/CD pipelines, and production monitoring.",
+      "Mentored junior developers and provided technical guidance."
+    ],
+    "skills": [
+      "Golang",
+      "GraphQL",
+      "Monorepo",
+      "JavaScript / TypeScript",
+      "NextJs",
+      "NestJs",
+      "BunJs",
+      "Node.js",
+      "REST APIs",
+      "MongoDB",
+      "Digital Ocean",
+      "Docker",
+      "CI/CD"
+    ],
+    "order_index": 2,
+    "is_published": true,
+    "created_at": "2026-01-20T09:11:18.09941+00:00",
+    "logo_url": "/company/emge_logo.png"
+  },
+  {
+    "id": "7234d17f-76b0-40e6-8f07-829d198f6487",
+    "start_date": "2024",
+    "end_date": "Present",
+    "position": "Senior Full Stack Web Developer",
+    "company": "Varroe",
+    "desc": [],
+    "skills": [
+      "TypeScript",
+      "React.js",
+      "Cascading Style Sheets (CSS)",
+      "Web Development",
+      "JavaScript",
+      "Agile & Waterfall Methodologies",
+      "ESLint",
+      "Redux.js",
+      "Next.js",
+      "Front-End Development Node.js",
+      "Web Development",
+      "Express.js",
+      "Agile & Waterfall Methodologies",
+      "ESLint",
+      "Databases",
+      "System Architecture",
+      "Representational State Transfer (REST)",
+      "Sequelize.js",
+      "SQL",
+      "Object-Oriented Programming (OOP)",
+      "PostgreSQL",
+      "Tailwind CSS"
+    ],
+    "order_index": 3,
+    "is_published": true,
+    "created_at": "2025-12-23T13:26:49.541069+00:00",
+    "logo_url": "/company/varroe_logo.png"
+  },
+  {
+    "id": "26481987-4be6-4da3-989b-22235a9c8b78",
+    "start_date": "2024",
+    "end_date": "2024",
+    "position": "Senior Backend Developer",
+    "company": "Fincra Technologies",
+    "desc": [
+      "Collaborated within a small team to build and maintain microservices for a high-volume payouts platform.",
+      "Developed idempotent API patterns and distributed locking to ensure financial transactional integrity.",
+      "Implemented integrations for global payment gateways and automated payout routing services.",
+      "Assisted in the development of real-time reconciliation tools to verify ledger accuracy against bank data.",
+      "Maintained and optimized backend services to ensure consistent uptime and data security.",
+      "Worked across the full SDLC to deliver features for secure and scalable financial disbursement workflows."
+    ],
+    "skills": [
       "Knex",
       "Systems Design & Architecture",
       "Payment Services",
@@ -160,18 +169,247 @@ export default [
       "Microservices",
       "SCRUM & Agile Methodology",
       "MongoDB",
-      "GraphQL",
+      "GraphQL"
     ],
+    "order_index": 4,
+    "is_published": true,
+    "created_at": "2025-12-23T13:26:49.541069+00:00",
+    "logo_url": "/company/fincra_logo.png"
   },
   {
-    date: {
-      start: "2024",
-      end: "Present",
-    },
-    position: "Senior Fullstack Developer",
-    company: "Varroe",
-    desc: "",
-    skills:
-      "TypeScript · React.js · Cascading Style Sheets (CSS) · Web Development · JavaScript · Agile & Waterfall Methodologies · ESLint · Redux.js · Next.js · Front-End Development Node.js · Web Development · Express.js · Agile & Waterfall Methodologies · ESLint · Databases · System Architecture · Representational State Transfer (REST) · Sequelize.js · SQL · Object-Oriented Programming (OOP) · PostgreSQL · Tailwind CSS",
+    "id": "2fc38f46-3ae9-45cf-a7b3-bbb7cf04439a",
+    "start_date": "2021",
+    "end_date": "2024",
+    "position": "Full Stack Developer",
+    "company": "BuyPower (YC W17)",
+    "desc": [],
+    "skills": [
+      "TypeScript",
+      "Node.js",
+      "React.js",
+      "Core Banking",
+      "mui",
+      "Web Development",
+      "Express.js",
+      "JavaScript",
+      "Back-End Web Development",
+      "Agile & Waterfall Methodologies",
+      "Tailwind CSS",
+      "Bash",
+      "ESLint",
+      "Payment Services",
+      "Redux.js",
+      "Microservices",
+      "Data Caching",
+      "Amazon Web Services (AWS)",
+      "Redis",
+      "Representational State Transfer (REST)",
+      "Sequelize.js",
+      "RabbitMQ",
+      "MySQL"
+    ],
+    "order_index": 5,
+    "is_published": true,
+    "created_at": "2025-12-23T13:26:49.541069+00:00",
+    "logo_url": "/company/buypower_logo.png"
   },
-].reverse();
+  {
+    "id": "725d6c42-4af6-458c-ae97-25294bcc1ba6",
+    "start_date": "2023",
+    "end_date": "2024",
+    "position": "Frontend Developer",
+    "company": "Perizer",
+    "desc": [],
+    "skills": [
+      "TypeScript",
+      "Node.js",
+      "Web Development",
+      "Agile & Waterfall Methodologies",
+      "Tailwind CSS",
+      "ESLint",
+      "Agile Methodologies",
+      "Next.js",
+      "Front-End Development",
+      "Ant Design"
+    ],
+    "order_index": 6,
+    "is_published": true,
+    "created_at": "2025-12-23T13:26:49.541069+00:00",
+    "logo_url": "/company/perizer_logo.png"
+  },
+  {
+    "id": "e97f0dd4-a359-4110-95ec-d47be2d1845b",
+    "start_date": "2023",
+    "end_date": "2023",
+    "position": "Frontend Web Developer - Contract",
+    "company": "SimpleMarket Inc. (BetaStore.co)",
+    "desc": [],
+    "skills": [
+      "TypeScript",
+      "React.js",
+      "chakra-ui",
+      "Web Development",
+      "JavaScript",
+      "Agile & Waterfall Methodologies",
+      "ESLint",
+      "Redux.js",
+      "pnpm",
+      "Front-End Development",
+      "vite",
+      "Web Development",
+      "Tailwind CSS",
+      "React Hooks",
+      "React Context",
+      "React Testing Library",
+      "Jest",
+      "RTK Query"
+    ],
+    "order_index": 7,
+    "is_published": true,
+    "created_at": "2025-12-23T13:26:49.541069+00:00",
+    "logo_url": "/company/betastore_logo.png"
+  },
+  {
+    "id": "a9aa995d-151c-4edf-a6e8-fc311c576033",
+    "start_date": "2022",
+    "end_date": "2022",
+    "position": "Full Stack Developer - Contract",
+    "company": "Varroe",
+    "desc": [
+      "Developed and maintained customer-facing web application interfaces using ReactJS, Next.js, and Tailwind CSS.",
+      "Translated designs into responsive and visually appealing UIs",
+      "Optimized performance (Next.js SSR) for faster load times",
+      "Integrated Node.js APIs for dynamic content.",
+      "Ensured cross-browser compatibility.",
+      "Developed core API for business finder solution.",
+      "Led initial backend development, establishing a scalable system."
+    ],
+    "skills": [
+      "TypeScript",
+      "React.js",
+      "Cascading Style Sheets (CSS)",
+      "Web Development",
+      "JavaScript",
+      "Agile & Waterfall Methodologies",
+      "ESLint",
+      "Redux.js",
+      "Next.js",
+      "Front-End Development Node.js",
+      "Web Development",
+      "Express.js",
+      "Agile & Waterfall Methodologies",
+      "ESLint",
+      "Databases",
+      "System Architecture",
+      "Representational State Transfer (REST)",
+      "Sequelize.js",
+      "SQL",
+      "Object-Oriented Programming (OOP)",
+      "PostgreSQL",
+      "Tailwind CSS"
+    ],
+    "order_index": 8,
+    "is_published": true,
+    "created_at": "2025-12-23T13:26:49.541069+00:00",
+    "logo_url": "/company/varroe_logo.png"
+  },
+  {
+    "id": "3628c729-5e51-4acf-80c6-900bc1206461",
+    "start_date": "2021",
+    "end_date": "2021",
+    "position": "Full Stack Developer - Freelance",
+    "company": "Vastovers Stemordz Ltd",
+    "desc": [
+      "Developed a complete online store for Vastover Stemordz Ltd, a pharmaceutical company in Abuja, Nigeria.",
+      "Upgraded their outdated system to a modern e-commerce platform.",
+      "Built the entire app from scratch, including the front-end and back-end.",
+      "Made sure the old and new systems could work together smoothly.",
+      "Created user-friendly features and designs to make shopping easier.",
+      "Worked closely with the company to understand their needs and meet their requirements.",
+      "Ensured the website was secure and protected customer information.",
+      "Tested everything thoroughly to fix any problems and make it run smoothly.",
+      "Provided ongoing support and maintenance to keep the website running well.",
+      "Helped Vastover Stemordz Ltd grow their online sales and reach more customers in the pharmaceutical industry."
+    ],
+    "skills": [
+      "React.js",
+      "Web Development",
+      "Back-End Web Development",
+      "Python (Programming Language)",
+      "Representational State Transfer (REST)",
+      "Front-End Development",
+      "E-commerce",
+      "Web Design",
+      "Web Application Development",
+      "PostgreSQL",
+      "Redux.js",
+      "Flask",
+      "Databases"
+    ],
+    "order_index": 9,
+    "is_published": true,
+    "created_at": "2025-12-23T13:26:49.541069+00:00",
+    "logo_url": "/company/vast_logo.png"
+  },
+  {
+    "id": "4a379904-7cd0-4e14-a60e-4a5f79e11b0f",
+    "start_date": "2021",
+    "end_date": "2021",
+    "position": "NYSC Attaché - Support Personnel",
+    "company": "Inlaks Nigeria",
+    "desc": [
+      "At INLAKS Ltd., the sole distributor of Temenos T24 in Sub-Saharan Africa, I provided support for the core banking sector on a project with CBN. I gained hands-on experience with T24, running batch scripts, subroutines, and database queries to improve performance and reduce redundancy. Working extensively with the terminal, I deepened my understanding of core banking concepts and system limitations, enhancing my problem-solving skills and ability to work under pressure. This experience equipped me with the technical expertise to contribute effectively to banking and financial technology solutions."
+    ],
+    "skills": [
+      "cmd",
+      "Bash",
+      "jBase",
+      "SQL",
+      "MySQL",
+      "window server",
+      "Linux",
+      "Temenos T24",
+      "Core Banking",
+      "Banking",
+      "Financial Technology",
+      "Batch Processing",
+      "Database Management",
+      "System Administration"
+    ],
+    "order_index": 10,
+    "is_published": true,
+    "created_at": "2025-12-23T13:26:49.541069+00:00",
+    "logo_url": "/company/Inlaks_logo.png"
+  },
+  {
+    "id": "2d0ba577-6e27-4deb-a845-42902f3e7b8f",
+    "start_date": "2019",
+    "end_date": "2019",
+    "position": "Web Developer Software Intern",
+    "company": "Pyrich Group Limited",
+    "desc": [
+      "I developed and enhanced a full-stack web application for a government agency to manage visitor information and streamline operations. My role involved building core functionalities, improving existing systems, and troubleshooting bugs to enhance system reliability. This experience strengthened my problem-solving skills, attention to detail, and understanding of quality assurance in real-world software development."
+    ],
+    "skills": [
+      "Node.js",
+      "React.js",
+      "Web Design",
+      "Web Development",
+      "Express.js",
+      "Back-End Web Development",
+      "Databases",
+      "Redux.js",
+      "Knex.js",
+      "Representational State Transfer (REST)",
+      "PostgreSQL",
+      "Front-End Development",
+      "SaaS Development"
+    ],
+    "order_index": 11,
+    "is_published": true,
+    "created_at": "2025-12-23T13:26:49.541069+00:00",
+    "logo_url": "/company/pyrich_logo.png"
+  }
+];
+
+export default experience;
